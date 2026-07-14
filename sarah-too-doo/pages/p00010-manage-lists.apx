@@ -1,0 +1,48 @@
+page 10 (
+    name: Manage Lists
+    alias: MANAGE_LISTS
+    title: Manage Lists
+    pageGroup: @administration
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region lists (
+        name: To-Do Lists
+        type: interactiveGrid
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        source {
+            location: localDatabase
+            type: TABLE
+            tableName: TODO_LISTS
+        }
+
+        column list_id (
+            heading: List ID
+            isVisible: false
+            sourceDbColumnName: LIST_ID
+        )
+
+    )
+
+    process lists-save (
+        name: Save Interactive Grid Data
+        type: interactiveGridAutoRowProcessing
+        execution {
+            sequence: 10
+            point: ajaxCallback
+        }
+    )
+
+)

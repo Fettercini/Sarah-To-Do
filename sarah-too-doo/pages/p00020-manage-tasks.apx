@@ -1,0 +1,69 @@
+page 20 (
+    name: Manage Tasks
+    alias: MANAGE_TASKS
+    title: Manage Tasks
+    pageGroup: @administration
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region tasks (
+        name: Tasks
+        type: interactiveGrid
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        source {
+            location: localDatabase
+            type: TABLE
+            tableName: TODO_TASKS
+        }
+
+        column task_id (
+            heading: Task ID
+            isVisible: false
+            sourceDbColumnName: TASK_ID
+        )
+
+        column list_id (
+            heading: List
+            sourceDbColumnName: LIST_ID
+            lov {
+                type: sharedComponent
+                lov: @todo-lists
+            }
+        )
+
+        column is_complete (
+            heading: Complete
+            isVisible: false
+            sourceDbColumnName: IS_COMPLETE
+        )
+
+        column completed_on (
+            heading: Completed On
+            isVisible: false
+            sourceDbColumnName: COMPLETED_ON
+        )
+
+    )
+
+    process tasks-save (
+        name: Save Interactive Grid Data
+        type: interactiveGridAutoRowProcessing
+        execution {
+            sequence: 10
+            point: ajaxCallback
+        }
+    )
+
+)

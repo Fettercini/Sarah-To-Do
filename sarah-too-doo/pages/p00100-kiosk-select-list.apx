@@ -1,0 +1,53 @@
+page 100 (
+    name: Kiosk - Select List
+    alias: KIOSK_SELECT_LIST
+    title: Sarah-Too-Doo
+    pageGroup: @kiosk
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region select-list (
+        name: Select a List
+        type: cards
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        source {
+            location: localDatabase
+            type: SQL
+            sqlQuery:
+                ```sql
+                select list_id,
+                       list_name
+                  from todo_lists
+                 order by display_order, list_name
+                ```
+        }
+
+        title {
+            columnName: LIST_NAME
+        }
+
+        action open-list (
+            name: Open List
+            type: link
+            target: {
+                type: url
+                url: f?p=&APP_ID.:110:&SESSION.::NO::P110_LIST_ID:#LIST_ID#
+            }
+        )
+
+    )
+
+)

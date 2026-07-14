@@ -1,0 +1,116 @@
+page 110 (
+    name: Kiosk - Complete Tasks
+    alias: KIOSK_TASKS
+    title: Sarah-Too-Doo
+    pageGroup: @kiosk
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region back-link (
+        name: Back
+        type: staticContent
+        layout {
+            sequence: 5
+            slot: contentBody
+        }
+        source {
+            htmlCode: <a href="f?p=&APP_ID.:100:&SESSION.">&lt; Back to Lists</a>
+        }
+    )
+
+    region tasks (
+        name: Tasks
+        type: cards
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        source {
+            location: localDatabase
+            type: SQL
+            sqlQuery:
+                ```sql
+                select task_id,
+                       task_name,
+                       case when is_complete = 'Y' then 'Completed' else 'Tap to complete' end as status_label
+                  from todo_tasks
+                 where list_id = :P110_LIST_ID
+                 order by is_complete asc, display_order asc, task_id asc
+                ```
+        }
+
+        title {
+            columnName: TASK_NAME
+        }
+
+        body {
+            columnName: STATUS_LABEL
+        }
+
+        action toggle-complete (
+            name: Toggle Complete
+            type: link
+            target: {
+                type: url
+                url: f?p=&APP_ID.:110:&SESSION.:TOGGLE:NO::P110_TASK_ID:#TASK_ID#
+            }
+        )
+
+    )
+
+    pageItem P110_LIST_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @tasks
+            slot: regionBody
+        }
+    )
+
+    pageItem P110_TASK_ID (
+        type: hidden
+        layout {
+            sequence: 20
+            region: @tasks
+            slot: regionBody
+        }
+    )
+
+    process toggle-task (
+        name: Toggle Task Complete
+        type: executeCode
+        execution {
+            sequence: 10
+            point: beforeHeader
+        }
+        serverSideCondition {
+            type: expression
+            plsqlExpression: :REQUEST = 'TOGGLE'
+        }
+        source {
+            location: localDatabase
+            language: plsql
+            plsqlCode:
+                ```plsql
+                update todo_tasks
+                   set is_complete = case when is_complete = 'Y' then 'N' else 'Y' end,
+                       completed_on = case when is_complete = 'N' then systimestamp end,
+                       updated_by = :APP_USER,
+                       updated_on = sysdate
+                 where task_id = :P110_TASK_ID
+                   and list_id = :P110_LIST_ID;
+                ```
+        }
+    )
+
+)

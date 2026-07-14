@@ -1,3 +1,18 @@
+lov todo-lists (
+    name: TODO_LISTS
+    source {
+        location: localDatabase
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select list_name d,
+                   list_id r
+              from todo_lists
+             order by display_order, list_name
+            ```
+    }
+)
+
 lov boolean (
     name: BOOLEAN
     source {
