@@ -162,6 +162,7 @@ page 20 (
             lov {
                 type: sharedComponent
                 lov: @todo-lists
+                displayExtraValues: false
             }
             layout {
                 sequence: 20

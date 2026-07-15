@@ -13,27 +13,21 @@ page 110 (
             body.t-Body,
             .t-PageBody,
             .t-Body-contentInner {
-                background-color: #121212;
-                color: #e8e8e8;
+                background-color: #121212 !important;
+                color: #e8e8e8 !important;
             }
-            .t-Region,
-            .a-Cards {
-                background-color: transparent;
+            [class*="Region"] {
+                background-color: transparent !important;
             }
-            .t-Card,
-            .a-Cards-item {
+            [class*="Card"] {
                 background-color: #1e1e1e !important;
                 border-color: #333333 !important;
                 color: #f0f0f0 !important;
             }
-            .t-Card:hover,
-            .a-Cards-item:hover {
-                background-color: #2a2a2a !important;
+            [class*="Card"]:hover {
+                background-color: #262626 !important;
             }
-            .t-Card-title,
-            .a-Cards-title,
-            .t-Card-body,
-            .a-Cards-body {
+            [class*="Card"] * {
                 color: #f0f0f0 !important;
             }
             .t-Button {
@@ -47,8 +41,56 @@ page 110 (
                 border-color: #0d6efd;
                 color: #ffffff;
             }
-            .fa-check-circle {
-                color: #2ecc71 !important;
+
+            .task-row {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 6px 2px;
+                animation: taskFadeIn 0.35s ease;
+            }
+            .task-check {
+                flex-shrink: 0;
+                width: 28px;
+                height: 28px;
+                border-radius: 6px;
+                border: 2px solid #777777;
+                background-color: transparent;
+                position: relative;
+                transition: background-color 0.35s ease, border-color 0.35s ease;
+            }
+            .task-check--done {
+                background-color: #2ecc71;
+                border-color: #2ecc71;
+            }
+            .task-check--done::after {
+                content: "\2713";
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff !important;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .task-text {
+                font-size: 1.15rem;
+                transition: opacity 0.35s ease;
+            }
+            .task-text--done {
+                opacity: 0.5;
+                text-decoration: line-through;
+            }
+            @keyframes taskFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(4px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
             ```
     }
@@ -86,6 +128,14 @@ page 110 (
             sequence: 5
             slot: body
         }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--removeHeader js-removeLandmark
+                t-Region--scrollBody
+            ]
+        }
     )
 
     region tasks (
@@ -98,8 +148,7 @@ page 110 (
                 ```sql
                 select task_id,
                        task_name,
-                       is_complete,
-                       case when is_complete = 'Y' then 'fa-check-circle' else 'fa-circle-thin' end as status_icon
+                       is_complete
                   from todo_tasks
                  where list_id = :P110_LIST_ID
                  order by is_complete asc, display_order asc, task_id asc
@@ -109,13 +158,22 @@ page 110 (
             sequence: 10
             slot: body
         }
-        body {
-            column: TASK_NAME
+        appearance {
+            template: @/cards-container
+            templateOptions: [
+                #DEFAULT#
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
         }
-        iconAndBadge {
-            iconSource: iconClassColumn
-            iconColumn: STATUS_ICON
-            iconPosition: start
+        title {
+            advancedFormatting: true
+            htmlExpression:
+                ```html
+                <div class="task-row">
+                    <span class="task-check{if IS_COMPLETE} task-check--done{if/}"></span>
+                    <span class="task-text{if IS_COMPLETE} task-text--done{if/}">#TASK_NAME#</span>
+                </div>
+                ```
         }
 
         action toggle-complete (

@@ -13,28 +13,24 @@ page 100 (
             body.t-Body,
             .t-PageBody,
             .t-Body-contentInner {
-                background-color: #121212;
-                color: #e8e8e8;
+                background-color: #121212 !important;
+                color: #e8e8e8 !important;
             }
-            .t-Region,
-            .a-Cards {
-                background-color: transparent;
+            [class*="Region"] {
+                background-color: transparent !important;
+                border-color: #2a2a2a !important;
             }
-            .t-Card,
-            .a-Cards-item {
+            [class*="Card"] {
                 background-color: #1e1e1e !important;
                 border-color: #333333 !important;
                 color: #f0f0f0 !important;
             }
-            .t-Card:hover,
-            .a-Cards-item:hover {
+            [class*="Card"]:hover {
                 background-color: #2a2a2a !important;
             }
-            .t-Card-title,
-            .a-Cards-title,
-            .t-Card-body,
-            .a-Cards-body {
+            [class*="Card"] * {
                 color: #f0f0f0 !important;
+                border-color: #333333 !important;
             }
             .t-Button {
                 background-color: #2a2a2a;
@@ -89,6 +85,13 @@ page 100 (
             sequence: 5
             slot: body
         }
+        appearance {
+            template: @/cards-container
+            templateOptions: [
+                #DEFAULT#
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
+        }
         body {
             column: GROUP_NAME
         }
@@ -129,6 +132,13 @@ page 100 (
         layout {
             sequence: 10
             slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: [
+                #DEFAULT#
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
         }
         body {
             column: LIST_NAME
