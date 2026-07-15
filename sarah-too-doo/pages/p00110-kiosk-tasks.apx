@@ -12,23 +12,21 @@ page 110 (
             ```css
             body.t-Body,
             .t-PageBody,
-            .t-Body-contentInner {
+            .t-Body-contentInner,
+            .t-Region {
                 background-color: #121212 !important;
                 color: #e8e8e8 !important;
             }
-            [class*="Region"] {
-                background-color: transparent !important;
-            }
-            [class*="Card"] {
+            .kiosk-card,
+            .kiosk-card * {
                 background-color: #1e1e1e !important;
+                color: #f0f0f0 !important;
+            }
+            .kiosk-card {
                 border-color: #333333 !important;
-                color: #f0f0f0 !important;
             }
-            [class*="Card"]:hover {
+            .kiosk-card:hover {
                 background-color: #262626 !important;
-            }
-            [class*="Card"] * {
-                color: #f0f0f0 !important;
             }
             .t-Button {
                 background-color: #2a2a2a;
@@ -165,58 +163,77 @@ page 110 (
                 t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
             ]
         }
+        card {
+            cssClasses: [
+                kiosk-card
+            ]
+        }
         title {
             advancedFormatting: true
             htmlExpression:
                 ```html
-                <div class="task-row">
+                <div class="task-row" data-task-id="#TASK_ID#">
                     <span class="task-check{if IS_COMPLETE} task-check--done{if/}"></span>
                     <span class="task-text{if IS_COMPLETE} task-text--done{if/}">#TASK_NAME#</span>
                 </div>
                 ```
         }
 
-        action toggle-complete (
-            type: fullCard
-            layout {
-                sequence: 10
+    )
+
+    dynamicAction toggle-task-ajax (
+        name: Toggle Task Complete
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: jQuerySelector
+            jquerySelector: .task-row
+        }
+
+        action optimistic-toggle (
+            action: executeJsCode
+            settings {
+                jsCode:
+                    ```javascript-browser
+                    var $row = $( this.triggeringElement );
+                    var $check = $row.find( ".task-check" );
+                    var $text = $row.find( ".task-text" );
+                    var nowComplete = !$check.hasClass( "task-check--done" );
+                    $check.toggleClass( "task-check--done", nowComplete );
+                    $text.toggleClass( "task-text--done", nowComplete );
+                    apex.item( "P110_TASK_ID" ).setValue( $row.data( "taskId" ) );
+                    ```
             }
-            behavior {
-                target: {
-                    page: 110
-                    request: TOGGLE
-                    items: {
-                        P110_TASK_ID: &TASK_ID.
-                    }
-                }
+            execution {
+                sequence: 10
             }
         )
 
-    )
+        action persist-toggle (
+            action: executeServerSideCode
+            settings {
+                plsqlCode:
+                    ```plsql
+                    update todo_tasks
+                       set is_complete = case when is_complete = 'Y' then 'N' else 'Y' end,
+                           completed_on = case when is_complete = 'N' then systimestamp end,
+                           updated_by = :APP_USER,
+                           updated_on = sysdate
+                     where task_id = :P110_TASK_ID
+                       and list_id = :P110_LIST_ID;
+                    ```
+                itemsToSubmit: [
+                    P110_TASK_ID
+                    P110_LIST_ID
+                ]
+            }
+            execution {
+                sequence: 20
+            }
+        )
 
-    process toggle-task (
-        name: Toggle Task Complete
-        type: executeCode
-        source {
-            plsqlCode:
-                ```plsql
-                update todo_tasks
-                   set is_complete = case when is_complete = 'Y' then 'N' else 'Y' end,
-                       completed_on = case when is_complete = 'N' then systimestamp end,
-                       updated_by = :APP_USER,
-                       updated_on = sysdate
-                 where task_id = :P110_TASK_ID
-                   and list_id = :P110_LIST_ID;
-                ```
-        }
-        execution {
-            sequence: 10
-            point: beforeHeader
-        }
-        serverSideCondition {
-            type: expression
-            plsqlExpression: :REQUEST = 'TOGGLE'
-        }
     )
 
 )

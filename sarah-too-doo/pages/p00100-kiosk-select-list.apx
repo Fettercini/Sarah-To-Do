@@ -12,25 +12,19 @@ page 100 (
             ```css
             body.t-Body,
             .t-PageBody,
-            .t-Body-contentInner {
+            .t-Body-contentInner,
+            .t-Region {
                 background-color: #121212 !important;
                 color: #e8e8e8 !important;
             }
-            [class*="Region"] {
-                background-color: transparent !important;
-                border-color: #2a2a2a !important;
-            }
-            [class*="Card"] {
+            .kiosk-card,
+            .kiosk-card * {
                 background-color: #1e1e1e !important;
                 border-color: #333333 !important;
                 color: #f0f0f0 !important;
             }
-            [class*="Card"]:hover {
+            .kiosk-card:hover {
                 background-color: #2a2a2a !important;
-            }
-            [class*="Card"] * {
-                color: #f0f0f0 !important;
-                border-color: #333333 !important;
             }
             .t-Button {
                 background-color: #2a2a2a;
@@ -92,6 +86,11 @@ page 100 (
                 t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
             ]
         }
+        card {
+            cssClasses: [
+                kiosk-card
+            ]
+        }
         body {
             column: GROUP_NAME
         }
@@ -138,6 +137,11 @@ page 100 (
             templateOptions: [
                 #DEFAULT#
                 t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
+        }
+        card {
+            cssClasses: [
+                kiosk-card
             ]
         }
         body {
