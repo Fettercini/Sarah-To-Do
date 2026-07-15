@@ -1,0 +1,203 @@
+page 30 (
+    name: Manage Groups
+    alias: MANAGE_GROUPS
+    title: Manage Groups
+    pageGroup: @administration
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region groups (
+        name: List Groups
+        type: interactiveGrid
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select group_id,
+                       group_name,
+                       display_order,
+                       created_by,
+                       created_on,
+                       updated_by,
+                       updated_on
+                  from todo_list_groups
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+        edit {
+            enabled: true
+            allowedOperations: [
+                add
+                update
+                delete
+            ]
+            addRowIfEmpty: false
+        }
+        toolbar {
+            controls: saveButton
+        }
+        advanced {
+            savedReportMappingIdentifier: 18485685204603313389
+        }
+
+        savedReport primary (
+            visibility: primary
+            view {
+                default: grid
+            }
+
+            displayColumn (
+                column: @group_name
+                layout {
+                    sequence: 10
+                }
+            )
+
+            displayColumn (
+                column: @display_order
+                layout {
+                    sequence: 20
+                }
+            )
+
+        )
+
+        column created_by (
+            type: textField
+            heading {
+                heading: created by
+            }
+            layout {
+                sequence: 90
+            }
+            source {
+                databaseColumn: CREATED_BY
+                dataType: varchar2
+                queryOnly: true
+            }
+        )
+
+        column created_on (
+            type: textField
+            heading {
+                heading: created on
+            }
+            layout {
+                sequence: 91
+            }
+            source {
+                databaseColumn: CREATED_ON
+                dataType: date
+                queryOnly: true
+            }
+        )
+
+        column display_order (
+            type: textField
+            heading {
+                heading: Order
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DISPLAY_ORDER
+                dataType: number
+            }
+        )
+
+        column group_id (
+            type: textField
+            heading {
+                heading: group id
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: GROUP_ID
+                dataType: number
+                primaryKey: true
+            }
+        )
+
+        column group_name (
+            type: textField
+            heading {
+                heading: Group Name
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: GROUP_NAME
+                dataType: varchar2
+            }
+        )
+
+        column updated_by (
+            type: textField
+            heading {
+                heading: updated by
+            }
+            layout {
+                sequence: 92
+            }
+            source {
+                databaseColumn: UPDATED_BY
+                dataType: varchar2
+                queryOnly: true
+            }
+        )
+
+        column updated_on (
+            type: textField
+            heading {
+                heading: updated on
+            }
+            layout {
+                sequence: 93
+            }
+            source {
+                databaseColumn: UPDATED_ON
+                dataType: date
+                queryOnly: true
+            }
+        )
+
+    )
+
+    process groups-save (
+        name: Save Interactive Grid Data
+        type: interactiveGridAutoRowProcessing
+        editableRegion: @groups
+        execution {
+            sequence: 10
+        }
+        advanced {
+            executionMappingIdentifier: 18485686423344313390
+        }
+    )
+
+)
+
