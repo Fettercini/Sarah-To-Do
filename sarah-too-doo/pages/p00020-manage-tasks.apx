@@ -89,6 +89,48 @@ page 20 (
             }
         )
 
+        column task_name (
+            type: textField
+            heading {
+                heading: Task
+            }
+            layout {
+                sequence: 30
+            }
+            enableUsersTo {
+                sort: true
+                hide: false
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: TASK_NAME
+                dataType: varchar2
+                queryOnly: false
+                primaryKey: false
+            }
+        )
+
+        column display_order (
+            type: textField
+            heading {
+                heading: Order
+            }
+            layout {
+                sequence: 40
+            }
+            enableUsersTo {
+                sort: true
+                hide: false
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: DISPLAY_ORDER
+                dataType: number
+                queryOnly: false
+                primaryKey: false
+            }
+        )
+
         column is_complete (
             type: textField
             layout {

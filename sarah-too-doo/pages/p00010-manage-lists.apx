@@ -64,6 +64,48 @@ page 10 (
             }
         )
 
+        column list_name (
+            type: textField
+            heading {
+                heading: List Name
+            }
+            layout {
+                sequence: 20
+            }
+            enableUsersTo {
+                sort: true
+                hide: false
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: LIST_NAME
+                dataType: varchar2
+                queryOnly: false
+                primaryKey: false
+            }
+        )
+
+        column display_order (
+            type: textField
+            heading {
+                heading: Order
+            }
+            layout {
+                sequence: 30
+            }
+            enableUsersTo {
+                sort: true
+                hide: false
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: DISPLAY_ORDER
+                dataType: number
+                queryOnly: false
+                primaryKey: false
+            }
+        )
+
         column created_by (
             type: textField
             layout {
