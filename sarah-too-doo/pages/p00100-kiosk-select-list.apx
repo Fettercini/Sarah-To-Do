@@ -17,11 +17,11 @@ page 100 (
     }
 
     region select-list (
-        name: Select a List
+        name: Select a To-Do List
         type: cards
         layout {
             sequence: 10
-            slot: contentBody
+            slot: body
         }
         source {
             location: localDatabase

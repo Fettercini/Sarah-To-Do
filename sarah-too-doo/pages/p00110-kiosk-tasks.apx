@@ -21,7 +21,7 @@ page 110 (
         type: staticContent
         layout {
             sequence: 5
-            slot: contentBody
+            slot: body
         }
         source {
             htmlCode: <a href="f?p=&APP_ID.:100:&SESSION.">&lt; Back to Lists</a>
@@ -29,11 +29,11 @@ page 110 (
     )
 
     region tasks (
-        name: Tasks
+        name: Task List
         type: cards
         layout {
             sequence: 10
-            slot: contentBody
+            slot: body
         }
         source {
             location: localDatabase

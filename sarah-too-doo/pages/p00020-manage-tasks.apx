@@ -20,7 +20,7 @@ page 20 (
         type: interactiveGrid
         layout {
             sequence: 10
-            slot: contentBody
+            slot: body
         }
         source {
             location: localDatabase
@@ -43,6 +43,157 @@ page 20 (
             visibility: primary
             view {
                 default: grid
+            }
+        )
+
+        column task_id (
+            type: textField
+            layout {
+                sequence: 10
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: TASK_ID
+                dataType: number
+                queryOnly: false
+                primaryKey: true
+            }
+        )
+
+        column list_id (
+            type: selectList
+            heading {
+                heading: List
+            }
+            layout {
+                sequence: 20
+            }
+            enableUsersTo {
+                sort: true
+                hide: false
+            }
+            lov {
+                type: sharedComponent
+                lov: @todo-lists
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: LIST_ID
+                dataType: number
+                queryOnly: false
+                primaryKey: false
+            }
+        )
+
+        column is_complete (
+            type: textField
+            layout {
+                sequence: 60
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: IS_COMPLETE
+                dataType: varchar2
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column completed_on (
+            type: textField
+            layout {
+                sequence: 61
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: COMPLETED_ON
+                dataType: timestamp
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column created_by (
+            type: textField
+            layout {
+                sequence: 90
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: CREATED_BY
+                dataType: varchar2
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column created_on (
+            type: textField
+            layout {
+                sequence: 91
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: CREATED_ON
+                dataType: date
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column updated_by (
+            type: textField
+            layout {
+                sequence: 92
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: UPDATED_BY
+                dataType: varchar2
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column updated_on (
+            type: textField
+            layout {
+                sequence: 93
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: UPDATED_ON
+                dataType: date
+                queryOnly: true
+                primaryKey: false
             }
         )
 

@@ -20,7 +20,7 @@ page 10 (
         type: interactiveGrid
         layout {
             sequence: 10
-            slot: contentBody
+            slot: body
         }
         source {
             location: localDatabase
@@ -43,6 +43,96 @@ page 10 (
             visibility: primary
             view {
                 default: grid
+            }
+        )
+
+        column list_id (
+            type: textField
+            layout {
+                sequence: 10
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: LIST_ID
+                dataType: number
+                queryOnly: false
+                primaryKey: true
+            }
+        )
+
+        column created_by (
+            type: textField
+            layout {
+                sequence: 90
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: CREATED_BY
+                dataType: varchar2
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column created_on (
+            type: textField
+            layout {
+                sequence: 91
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: CREATED_ON
+                dataType: date
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column updated_by (
+            type: textField
+            layout {
+                sequence: 92
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: UPDATED_BY
+                dataType: varchar2
+                queryOnly: true
+                primaryKey: false
+            }
+        )
+
+        column updated_on (
+            type: textField
+            layout {
+                sequence: 93
+            }
+            enableUsersTo {
+                sort: false
+                hide: true
+            }
+            source {
+                type: databaseColumn
+                databaseColumn: UPDATED_ON
+                dataType: date
+                queryOnly: true
+                primaryKey: false
             }
         )
 
