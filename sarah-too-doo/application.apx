@@ -1,8 +1,5 @@
 app SARAH-TOO-DOO (
     name: Sarah-Too-Doo
-    genAI {
-        service: @claude-pro
-    }
     logo {
         type: text
         text: Sarah-Too-Doo
