@@ -172,9 +172,9 @@ page 110 (
             advancedFormatting: true
             htmlExpression:
                 ```html
-                <div class="task-row" data-task-id="#TASK_ID#">
-                    <span class="task-check{if IS_COMPLETE} task-check--done{if/}"></span>
-                    <span class="task-text{if IS_COMPLETE} task-text--done{if/}">#TASK_NAME#</span>
+                <div class="task-row" data-task-id="&TASK_ID.">
+                    <span class="task-check{if IS_COMPLETE/} task-check--done{endif/}"></span>
+                    <span class="task-text{if IS_COMPLETE/} task-text--done{endif/}">&TASK_NAME!HTML.</span>
                 </div>
                 ```
         }
@@ -208,6 +208,7 @@ page 110 (
             }
             execution {
                 sequence: 10
+                fireOnInit: false
             }
         )
 
@@ -231,6 +232,7 @@ page 110 (
             }
             execution {
                 sequence: 20
+                fireOnInit: false
             }
         )
 
