@@ -15,23 +15,35 @@ page 10 (
         formAutoComplete: false
     }
 
+    region toolbar (
+        name: Toolbar
+        type: staticContent
+        layout {
+            sequence: 5
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
     region lists (
         name: To-Do Lists
-        type: interactiveGrid
+        type: classicReport
         source {
             location: localDatabase
             type: sqlQuery
             sqlQuery:
                 ```sql
-                select list_id,
-                       list_name,
-                       group_id,
-                       display_order,
-                       created_by,
-                       created_on,
-                       updated_by,
-                       updated_on
-                  from todo_lists
+                select l.list_id,
+                       l.list_name,
+                       g.group_name,
+                       l.display_order
+                  from todo_lists l
+                  left join todo_list_groups g
+                    on g.group_id = l.group_id
+                 order by l.display_order, l.list_name
                 ```
         }
         layout {
@@ -45,186 +57,124 @@ page 10 (
                 t-Region--scrollBody
             ]
         }
-        edit {
-            enabled: true
-            allowedOperations: [
-                add
-                update
-                delete
+        componentAppearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Report--stretch
+                t-Report--horizontalBorders
             ]
-            addRowIfEmpty: false
         }
-        toolbar {
-            controls: saveButton
+        pagination {
+            type: rowRangesXToYNoPagination
         }
-        advanced {
-            savedReportMappingIdentifier: 18452184611528039192
-        }
-
-        savedReport primary (
-            visibility: primary
-            view {
-                default: grid
-            }
-
-            displayColumn (
-                column: @list_name
-                layout {
-                    sequence: 10
-                }
-            )
-
-            displayColumn (
-                column: @group_id
-                layout {
-                    sequence: 20
-                }
-            )
-
-            displayColumn (
-                column: @display_order
-                layout {
-                    sequence: 30
-                }
-            )
-
-        )
-
-        column created_by (
-            type: textField
-            heading {
-                heading: created by
-            }
-            layout {
-                sequence: 90
-            }
-            source {
-                databaseColumn: CREATED_BY
-                dataType: varchar2
-                queryOnly: true
-            }
-        )
-
-        column created_on (
-            type: textField
-            heading {
-                heading: created on
-            }
-            layout {
-                sequence: 91
-            }
-            source {
-                databaseColumn: CREATED_ON
-                dataType: date
-                queryOnly: true
-            }
-        )
-
-        column display_order (
-            type: textField
-            heading {
-                heading: Order
-            }
-            layout {
-                sequence: 30
-            }
-            source {
-                databaseColumn: DISPLAY_ORDER
-                dataType: number
-            }
-        )
 
         column list_id (
-            type: textField
-            heading {
-                heading: list id
-            }
+            reportColumnQueryId: 1
+            derivedColumn: N
+            type: hidden
             layout {
                 sequence: 10
-            }
-            source {
-                databaseColumn: LIST_ID
-                dataType: number
-                primaryKey: true
             }
         )
 
         column list_name (
-            type: textField
+            reportColumnQueryId: 2
+            derivedColumn: N
+            type: link
             heading {
                 heading: List Name
+                alignment: start
             }
             layout {
                 sequence: 20
+                columnAlignment: start
             }
-            source {
-                databaseColumn: LIST_NAME
-                dataType: varchar2
+            link {
+                target: {
+                    page: 15
+                    items: {
+                        P15_LIST_ID: #LIST_ID#
+                    }
+                    clearCache: 15
+                }
+                linkText: #LIST_NAME#
             }
         )
 
-        column group_id (
-            type: selectList
+        column group_name (
+            reportColumnQueryId: 3
+            derivedColumn: N
             heading {
                 heading: Group
+                alignment: start
             }
             layout {
-                sequence: 25
-            }
-            lov {
-                type: sharedComponent
-                lov: @todo-list-groups
-                displayExtraValues: false
-            }
-            source {
-                databaseColumn: GROUP_ID
-                dataType: number
+                sequence: 30
+                columnAlignment: start
             }
         )
 
-        column updated_by (
-            type: textField
+        column display_order (
+            reportColumnQueryId: 4
+            derivedColumn: N
             heading {
-                heading: updated by
+                heading: Order
+                alignment: end
             }
             layout {
-                sequence: 92
-            }
-            source {
-                databaseColumn: UPDATED_BY
-                dataType: varchar2
-                queryOnly: true
-            }
-        )
-
-        column updated_on (
-            type: textField
-            heading {
-                heading: updated on
-            }
-            layout {
-                sequence: 93
-            }
-            source {
-                databaseColumn: UPDATED_ON
-                dataType: date
-                queryOnly: true
+                sequence: 40
+                columnAlignment: end
             }
         )
 
     )
 
-    process lists-save (
-        name: Save Interactive Grid Data
-        type: interactiveGridAutoRowProcessing
-        editableRegion: @lists
+    button create-list (
+        buttonName: CREATE
+        label: Add List
+        layout {
+            sequence: 10
+            region: @toolbar
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 15
+                clearCache: 15
+            }
+        }
+    )
+
+    dynamicAction refresh-lists-after-dialog (
+        name: Refresh Lists After Dialog
         execution {
             sequence: 10
         }
-        advanced {
-            executionMappingIdentifier: 18452184964506039193
+        when {
+            event: apexafterclosedialog
+            selectionType: region
+            region: @lists
         }
+
+        action refresh-lists (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @lists
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
     )
 
 )
-

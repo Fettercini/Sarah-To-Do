@@ -15,9 +15,22 @@ page 30 (
         formAutoComplete: false
     }
 
+    region toolbar (
+        name: Toolbar
+        type: staticContent
+        layout {
+            sequence: 5
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
     region groups (
         name: List Groups
-        type: interactiveGrid
+        type: classicReport
         source {
             location: localDatabase
             type: sqlQuery
@@ -25,12 +38,9 @@ page 30 (
                 ```sql
                 select group_id,
                        group_name,
-                       display_order,
-                       created_by,
-                       created_on,
-                       updated_by,
-                       updated_on
+                       display_order
                   from todo_list_groups
+                 order by display_order, group_name
                 ```
         }
         layout {
@@ -44,153 +54,111 @@ page 30 (
                 t-Region--scrollBody
             ]
         }
-        edit {
-            enabled: true
-            allowedOperations: [
-                add
-                update
-                delete
+        componentAppearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Report--stretch
+                t-Report--horizontalBorders
             ]
-            addRowIfEmpty: false
         }
-        toolbar {
-            controls: saveButton
+        pagination {
+            type: rowRangesXToYNoPagination
         }
-
-        savedReport primary (
-            visibility: primary
-            view {
-                default: grid
-            }
-
-            displayColumn (
-                column: @group_name
-                layout {
-                    sequence: 10
-                }
-            )
-
-            displayColumn (
-                column: @display_order
-                layout {
-                    sequence: 20
-                }
-            )
-
-        )
 
         column group_id (
-            type: textField
-            heading {
-                heading: group id
-            }
+            reportColumnQueryId: 1
+            derivedColumn: N
+            type: hidden
             layout {
                 sequence: 10
-            }
-            source {
-                databaseColumn: GROUP_ID
-                dataType: number
-                primaryKey: true
             }
         )
 
         column group_name (
-            type: textField
+            reportColumnQueryId: 2
+            derivedColumn: N
+            type: link
             heading {
                 heading: Group Name
+                alignment: start
             }
             layout {
                 sequence: 20
+                columnAlignment: start
             }
-            source {
-                databaseColumn: GROUP_NAME
-                dataType: varchar2
+            link {
+                target: {
+                    page: 35
+                    items: {
+                        P35_GROUP_ID: #GROUP_ID#
+                    }
+                    clearCache: 35
+                }
+                linkText: #GROUP_NAME#
             }
         )
 
         column display_order (
-            type: textField
+            reportColumnQueryId: 3
+            derivedColumn: N
             heading {
                 heading: Order
+                alignment: end
             }
             layout {
                 sequence: 30
-            }
-            source {
-                databaseColumn: DISPLAY_ORDER
-                dataType: number
-            }
-        )
-
-        column created_by (
-            type: textField
-            heading {
-                heading: created by
-            }
-            layout {
-                sequence: 90
-            }
-            source {
-                databaseColumn: CREATED_BY
-                dataType: varchar2
-                queryOnly: true
-            }
-        )
-
-        column created_on (
-            type: textField
-            heading {
-                heading: created on
-            }
-            layout {
-                sequence: 91
-            }
-            source {
-                databaseColumn: CREATED_ON
-                dataType: date
-                queryOnly: true
-            }
-        )
-
-        column updated_by (
-            type: textField
-            heading {
-                heading: updated by
-            }
-            layout {
-                sequence: 92
-            }
-            source {
-                databaseColumn: UPDATED_BY
-                dataType: varchar2
-                queryOnly: true
-            }
-        )
-
-        column updated_on (
-            type: textField
-            heading {
-                heading: updated on
-            }
-            layout {
-                sequence: 93
-            }
-            source {
-                databaseColumn: UPDATED_ON
-                dataType: date
-                queryOnly: true
+                columnAlignment: end
             }
         )
 
     )
 
-    process groups-save (
-        name: Save Interactive Grid Data
-        type: interactiveGridAutoRowProcessing
-        editableRegion: @groups
+    button create-group (
+        buttonName: CREATE
+        label: Add Group
+        layout {
+            sequence: 10
+            region: @toolbar
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 35
+                clearCache: 35
+            }
+        }
+    )
+
+    dynamicAction refresh-groups-after-dialog (
+        name: Refresh Groups After Dialog
         execution {
             sequence: 10
         }
+        when {
+            event: apexafterclosedialog
+            selectionType: region
+            region: @groups
+        }
+
+        action refresh-groups (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @groups
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
     )
 
 )
