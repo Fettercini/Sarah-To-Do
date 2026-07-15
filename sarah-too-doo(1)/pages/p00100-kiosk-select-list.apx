@@ -12,17 +12,12 @@ page 100 (
     }
     security {
         authentication: public
-        pageAccessProtection: unrestricted
         formAutoComplete: false
     }
 
     region select-list (
         name: Select a To-Do List
         type: cards
-        layout {
-            sequence: 10
-            slot: body
-        }
         source {
             location: localDatabase
             type: sqlQuery
@@ -34,6 +29,13 @@ page 100 (
                  order by display_order, list_name
                 ```
         }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        body {
+            column: LIST_NAME
+        }
 
         action open-list (
             type: fullCard
@@ -41,11 +43,17 @@ page 100 (
                 sequence: 10
             }
             behavior {
-                type: redirectUrl
-                targetUrl: f?p=&APP_ID.:110:&SESSION.::NO::P110_LIST_ID:#LIST_ID#
+                target: {
+                    page: 110
+                    items: {
+                        P110_LIST_ID: &LIST_ID.
+                    }
+                    clearCache: 110
+                }
             }
         )
 
     )
 
 )
+

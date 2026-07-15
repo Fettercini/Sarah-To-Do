@@ -12,29 +12,24 @@ page 110 (
     }
     security {
         authentication: public
-        pageAccessProtection: unrestricted
         formAutoComplete: false
     }
 
     region back-link (
         name: Back
         type: staticContent
+        source {
+            htmlCode: <a href="f?p=&APP_ID.:100:&SESSION.">&lt; Back to Lists</a>
+        }
         layout {
             sequence: 5
             slot: body
-        }
-        source {
-            htmlCode: <a href="f?p=&APP_ID.:100:&SESSION.">&lt; Back to Lists</a>
         }
     )
 
     region tasks (
         name: Task List
         type: cards
-        layout {
-            sequence: 10
-            slot: body
-        }
         source {
             location: localDatabase
             type: sqlQuery
@@ -48,6 +43,13 @@ page 110 (
                  order by is_complete asc, display_order asc, task_id asc
                 ```
         }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        body {
+            column: TASK_NAME
+        }
 
         action toggle-complete (
             type: fullCard
@@ -55,8 +57,12 @@ page 110 (
                 sequence: 10
             }
             behavior {
-                type: redirectUrl
-                targetUrl: f?p=&APP_ID.:110:&SESSION.:TOGGLE:NO::P110_TASK_ID:#TASK_ID#
+                target: {
+                    page: 110
+                    items: {
+                        P110_TASK_ID: &TASK_ID.
+                    }
+                }
             }
         )
 
@@ -83,17 +89,7 @@ page 110 (
     process toggle-task (
         name: Toggle Task Complete
         type: executeCode
-        execution {
-            sequence: 10
-            point: beforeHeader
-        }
-        serverSideCondition {
-            type: expression
-            plsqlExpression: :REQUEST = 'TOGGLE'
-        }
         source {
-            location: localDatabase
-            language: plsql
             plsqlCode:
                 ```plsql
                 update todo_tasks
@@ -105,6 +101,18 @@ page 110 (
                    and list_id = :P110_LIST_ID;
                 ```
         }
+        execution {
+            sequence: 10
+            point: beforeHeader
+        }
+        advanced {
+            executionMappingIdentifier: 18452186736676039198
+        }
+        serverSideCondition {
+            type: expression
+            plsqlExpression: :REQUEST = 'TOGGLE'
+        }
     )
 
 )
+

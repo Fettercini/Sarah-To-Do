@@ -18,16 +18,32 @@ page 10 (
     region lists (
         name: To-Do Lists
         type: interactiveGrid
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select list_id,
+                       list_name,
+                       display_order,
+                       created_by,
+                       created_on,
+                       updated_by,
+                       updated_on
+                  from todo_lists
+                ```
+        }
         layout {
             sequence: 10
             slot: body
         }
-        source {
-            location: localDatabase
-            type: tableView
-            tableName: TODO_LISTS
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
         }
-
         edit {
             enabled: true
             allowedOperations: [
@@ -35,8 +51,13 @@ page 10 (
                 update
                 delete
             ]
-            lostUpdateType: rowValues
             addRowIfEmpty: false
+        }
+        toolbar {
+            controls: saveButton
+        }
+        advanced {
+            savedReportMappingIdentifier: 18452184611528039192
         }
 
         savedReport primary (
@@ -44,22 +65,78 @@ page 10 (
             view {
                 default: grid
             }
+
+            displayColumn (
+                column: @list_name
+                layout {
+                    sequence: 10
+                }
+            )
+
+            displayColumn (
+                column: @display_order
+                layout {
+                    sequence: 20
+                }
+            )
+
+        )
+
+        column created_by (
+            type: textField
+            heading {
+                heading: created by
+            }
+            layout {
+                sequence: 90
+            }
+            source {
+                databaseColumn: CREATED_BY
+                dataType: varchar2
+                queryOnly: true
+            }
+        )
+
+        column created_on (
+            type: textField
+            heading {
+                heading: created on
+            }
+            layout {
+                sequence: 91
+            }
+            source {
+                databaseColumn: CREATED_ON
+                dataType: date
+                queryOnly: true
+            }
+        )
+
+        column display_order (
+            type: textField
+            heading {
+                heading: Order
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DISPLAY_ORDER
+                dataType: number
+            }
         )
 
         column list_id (
             type: textField
+            heading {
+                heading: list id
+            }
             layout {
                 sequence: 10
             }
-            enableUsersTo {
-                sort: false
-                hide: true
-            }
             source {
-                type: databaseColumn
                 databaseColumn: LIST_ID
                 dataType: number
-                queryOnly: false
                 primaryKey: true
             }
         )
@@ -72,109 +149,39 @@ page 10 (
             layout {
                 sequence: 20
             }
-            enableUsersTo {
-                sort: true
-                hide: false
-            }
             source {
-                type: databaseColumn
                 databaseColumn: LIST_NAME
                 dataType: varchar2
-                queryOnly: false
-                primaryKey: false
-            }
-        )
-
-        column display_order (
-            type: textField
-            heading {
-                heading: Order
-            }
-            layout {
-                sequence: 30
-            }
-            enableUsersTo {
-                sort: true
-                hide: false
-            }
-            source {
-                type: databaseColumn
-                databaseColumn: DISPLAY_ORDER
-                dataType: number
-                queryOnly: false
-                primaryKey: false
-            }
-        )
-
-        column created_by (
-            type: textField
-            layout {
-                sequence: 90
-            }
-            enableUsersTo {
-                sort: false
-                hide: true
-            }
-            source {
-                type: databaseColumn
-                databaseColumn: CREATED_BY
-                dataType: varchar2
-                queryOnly: true
-                primaryKey: false
-            }
-        )
-
-        column created_on (
-            type: textField
-            layout {
-                sequence: 91
-            }
-            enableUsersTo {
-                sort: false
-                hide: true
-            }
-            source {
-                type: databaseColumn
-                databaseColumn: CREATED_ON
-                dataType: date
-                queryOnly: true
-                primaryKey: false
             }
         )
 
         column updated_by (
             type: textField
+            heading {
+                heading: updated by
+            }
             layout {
                 sequence: 92
             }
-            enableUsersTo {
-                sort: false
-                hide: true
-            }
             source {
-                type: databaseColumn
                 databaseColumn: UPDATED_BY
                 dataType: varchar2
                 queryOnly: true
-                primaryKey: false
             }
         )
 
         column updated_on (
             type: textField
+            heading {
+                heading: updated on
+            }
             layout {
                 sequence: 93
             }
-            enableUsersTo {
-                sort: false
-                hide: true
-            }
             source {
-                type: databaseColumn
                 databaseColumn: UPDATED_ON
                 dataType: date
                 queryOnly: true
-                primaryKey: false
             }
         )
 
@@ -183,13 +190,14 @@ page 10 (
     process lists-save (
         name: Save Interactive Grid Data
         type: interactiveGridAutoRowProcessing
-        identification {
-            editableRegion: @lists
-        }
+        editableRegion: @lists
         execution {
             sequence: 10
-            point: processing
+        }
+        advanced {
+            executionMappingIdentifier: 18452184964506039193
         }
     )
 
 )
+

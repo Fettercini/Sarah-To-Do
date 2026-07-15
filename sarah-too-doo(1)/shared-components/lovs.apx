@@ -1,0 +1,37 @@
+lov boolean (
+    name: BOOLEAN
+    source {
+        location: staticValues
+    }
+
+    entry false (
+        sequence: 2
+        display: No
+        return: FALSE
+    )
+
+    entry true (
+        sequence: 1
+        display: Yes
+        return: TRUE
+    )
+
+)
+
+lov todo-lists (
+    name: TODO_LISTS
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select list_name d,
+                   list_id r
+              from todo_lists
+             order by display_order, list_name
+            ```
+    }
+    columnMapping {
+        return: R
+    }
+)
+
