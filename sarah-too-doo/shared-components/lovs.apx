@@ -11,6 +11,9 @@ lov todo-lists (
              order by display_order, list_name
             ```
     }
+    columnMapping {
+        return: R
+    }
 )
 
 lov boolean (

@@ -37,7 +37,7 @@ page 110 (
         }
         source {
             location: localDatabase
-            type: SQL
+            type: sqlQuery
             sqlQuery:
                 ```sql
                 select task_id,
@@ -49,20 +49,14 @@ page 110 (
                 ```
         }
 
-        title {
-            columnName: TASK_NAME
-        }
-
-        body {
-            columnName: STATUS_LABEL
-        }
-
         action toggle-complete (
-            name: Toggle Complete
-            type: link
-            target: {
-                type: url
-                url: f?p=&APP_ID.:110:&SESSION.:TOGGLE:NO::P110_TASK_ID:#TASK_ID#
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: f?p=&APP_ID.:110:&SESSION.:TOGGLE:NO::P110_TASK_ID:#TASK_ID#
             }
         )
 

@@ -24,14 +24,26 @@ page 10 (
         }
         source {
             location: localDatabase
-            type: TABLE
+            type: tableView
             tableName: TODO_LISTS
         }
 
-        column list_id (
-            heading: List ID
-            isVisible: false
-            sourceDbColumnName: LIST_ID
+        edit {
+            enabled: true
+            allowedOperations: [
+                add
+                update
+                delete
+            ]
+            lostUpdateType: rowValues
+            addRowIfEmpty: false
+        }
+
+        savedReport primary (
+            visibility: primary
+            view {
+                default: grid
+            }
         )
 
     )
@@ -39,9 +51,12 @@ page 10 (
     process lists-save (
         name: Save Interactive Grid Data
         type: interactiveGridAutoRowProcessing
+        identification {
+            editableRegion: @lists
+        }
         execution {
             sequence: 10
-            point: ajaxCallback
+            point: processing
         }
     )
 

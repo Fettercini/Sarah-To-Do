@@ -24,35 +24,26 @@ page 20 (
         }
         source {
             location: localDatabase
-            type: TABLE
+            type: tableView
             tableName: TODO_TASKS
         }
 
-        column task_id (
-            heading: Task ID
-            isVisible: false
-            sourceDbColumnName: TASK_ID
-        )
+        edit {
+            enabled: true
+            allowedOperations: [
+                add
+                update
+                delete
+            ]
+            lostUpdateType: rowValues
+            addRowIfEmpty: false
+        }
 
-        column list_id (
-            heading: List
-            sourceDbColumnName: LIST_ID
-            lov {
-                type: sharedComponent
-                lov: @todo-lists
+        savedReport primary (
+            visibility: primary
+            view {
+                default: grid
             }
-        )
-
-        column is_complete (
-            heading: Complete
-            isVisible: false
-            sourceDbColumnName: IS_COMPLETE
-        )
-
-        column completed_on (
-            heading: Completed On
-            isVisible: false
-            sourceDbColumnName: COMPLETED_ON
         )
 
     )
@@ -60,9 +51,12 @@ page 20 (
     process tasks-save (
         name: Save Interactive Grid Data
         type: interactiveGridAutoRowProcessing
+        identification {
+            editableRegion: @tasks
+        }
         execution {
             sequence: 10
-            point: ajaxCallback
+            point: processing
         }
     )
 

@@ -25,7 +25,7 @@ page 100 (
         }
         source {
             location: localDatabase
-            type: SQL
+            type: sqlQuery
             sqlQuery:
                 ```sql
                 select list_id,
@@ -35,16 +35,14 @@ page 100 (
                 ```
         }
 
-        title {
-            columnName: LIST_NAME
-        }
-
         action open-list (
-            name: Open List
-            type: link
-            target: {
-                type: url
-                url: f?p=&APP_ID.:110:&SESSION.::NO::P110_LIST_ID:#LIST_ID#
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: f?p=&APP_ID.:110:&SESSION.::NO::P110_LIST_ID:#LIST_ID#
             }
         )
 
