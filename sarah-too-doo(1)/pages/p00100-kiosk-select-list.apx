@@ -7,6 +7,48 @@ page 100 (
         pageTemplate: @/standard
         templateOptions: #DEFAULT#
     }
+    css {
+        inline:
+            ```css
+            body.t-Body,
+            .t-PageBody,
+            .t-Body-contentInner {
+                background-color: #121212;
+                color: #e8e8e8;
+            }
+            .t-Region,
+            .a-Cards {
+                background-color: transparent;
+            }
+            .t-Card,
+            .a-Cards-item {
+                background-color: #1e1e1e !important;
+                border-color: #333333 !important;
+                color: #f0f0f0 !important;
+            }
+            .t-Card:hover,
+            .a-Cards-item:hover {
+                background-color: #2a2a2a !important;
+            }
+            .t-Card-title,
+            .a-Cards-title,
+            .t-Card-body,
+            .a-Cards-body {
+                color: #f0f0f0 !important;
+            }
+            .t-Button {
+                background-color: #2a2a2a;
+                color: #e8e8e8;
+                border-color: #444444;
+            }
+            .t-Button--hot,
+            .t-Button.is-active {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                color: #ffffff;
+            }
+            ```
+    }
     navigation {
         cursorFocus: doNotFocusCursor
     }
@@ -14,6 +56,60 @@ page 100 (
         authentication: public
         formAutoComplete: false
     }
+
+    pageItem P100_GROUP_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+
+    region group-filter (
+        name: Filter by Group
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select cast(null as number) as group_id,
+                       'All Lists' as group_name,
+                       0 as display_order
+                  from dual
+                 union all
+                select group_id,
+                       group_name,
+                       display_order
+                  from todo_list_groups
+                 order by display_order, group_name
+                ```
+        }
+        layout {
+            sequence: 5
+            slot: body
+        }
+        body {
+            column: GROUP_NAME
+        }
+
+        action select-group (
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                target: {
+                    page: 100
+                    items: {
+                        P100_GROUP_ID: &GROUP_ID.
+                    }
+                    clearCache: 100
+                }
+            }
+        )
+
+    )
 
     region select-list (
         name: Select a To-Do List
@@ -26,6 +122,7 @@ page 100 (
                 select list_id,
                        list_name
                   from todo_lists
+                 where ( :P100_GROUP_ID is null or group_id = :P100_GROUP_ID )
                  order by display_order, list_name
                 ```
         }
@@ -56,4 +153,3 @@ page 100 (
     )
 
 )
-

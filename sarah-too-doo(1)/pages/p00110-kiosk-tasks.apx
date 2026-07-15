@@ -7,6 +7,51 @@ page 110 (
         pageTemplate: @/standard
         templateOptions: #DEFAULT#
     }
+    css {
+        inline:
+            ```css
+            body.t-Body,
+            .t-PageBody,
+            .t-Body-contentInner {
+                background-color: #121212;
+                color: #e8e8e8;
+            }
+            .t-Region,
+            .a-Cards {
+                background-color: transparent;
+            }
+            .t-Card,
+            .a-Cards-item {
+                background-color: #1e1e1e !important;
+                border-color: #333333 !important;
+                color: #f0f0f0 !important;
+            }
+            .t-Card:hover,
+            .a-Cards-item:hover {
+                background-color: #2a2a2a !important;
+            }
+            .t-Card-title,
+            .a-Cards-title,
+            .t-Card-body,
+            .a-Cards-body {
+                color: #f0f0f0 !important;
+            }
+            .t-Button {
+                background-color: #2a2a2a;
+                color: #e8e8e8;
+                border-color: #444444;
+            }
+            .t-Button--hot,
+            .t-Button.is-active {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                color: #ffffff;
+            }
+            .fa-check-circle {
+                color: #2ecc71 !important;
+            }
+            ```
+    }
     navigation {
         cursorFocus: doNotFocusCursor
     }
@@ -14,6 +59,22 @@ page 110 (
         authentication: public
         formAutoComplete: false
     }
+
+    pageItem P110_LIST_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+
+    pageItem P110_TASK_ID (
+        type: hidden
+        layout {
+            sequence: 20
+            slot: body
+        }
+    )
 
     region back-link (
         name: Back
@@ -37,7 +98,8 @@ page 110 (
                 ```sql
                 select task_id,
                        task_name,
-                       case when is_complete = 'Y' then 'Completed' else 'Tap to complete' end as status_label
+                       is_complete,
+                       case when is_complete = 'Y' then 'fa-check-circle' else 'fa-circle-thin' end as status_icon
                   from todo_tasks
                  where list_id = :P110_LIST_ID
                  order by is_complete asc, display_order asc, task_id asc
@@ -50,6 +112,11 @@ page 110 (
         body {
             column: TASK_NAME
         }
+        iconAndBadge {
+            iconSource: iconClassColumn
+            iconColumn: STATUS_ICON
+            iconPosition: start
+        }
 
         action toggle-complete (
             type: fullCard
@@ -59,6 +126,7 @@ page 110 (
             behavior {
                 target: {
                     page: 110
+                    request: TOGGLE
                     items: {
                         P110_TASK_ID: &TASK_ID.
                     }
@@ -66,24 +134,6 @@ page 110 (
             }
         )
 
-    )
-
-    pageItem P110_LIST_ID (
-        type: hidden
-        layout {
-            sequence: 10
-            region: @tasks
-            slot: regionBody
-        }
-    )
-
-    pageItem P110_TASK_ID (
-        type: hidden
-        layout {
-            sequence: 20
-            region: @tasks
-            slot: regionBody
-        }
     )
 
     process toggle-task (
@@ -105,9 +155,6 @@ page 110 (
             sequence: 10
             point: beforeHeader
         }
-        advanced {
-            executionMappingIdentifier: 18452186736676039198
-        }
         serverSideCondition {
             type: expression
             plsqlExpression: :REQUEST = 'TOGGLE'
@@ -115,4 +162,3 @@ page 110 (
     )
 
 )
-

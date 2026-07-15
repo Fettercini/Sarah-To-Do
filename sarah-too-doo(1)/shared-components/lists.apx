@@ -107,5 +107,20 @@ list navigation-menu (
         }
     )
 
+    entry manage-groups (
+        label: Manage Groups
+        icon {
+            imageIconCssClasses: fa-object-group
+        }
+        layout {
+            sequence: 40
+        }
+        link {
+            target: {
+                page: 30
+            }
+        }
+    )
+
 )
 

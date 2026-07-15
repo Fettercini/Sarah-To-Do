@@ -1,7 +1,7 @@
-page 10 (
-    name: Manage Lists
-    alias: MANAGE_LISTS
-    title: Manage Lists
+page 30 (
+    name: Manage Groups
+    alias: MANAGE_GROUPS
+    title: Manage Groups
     pageGroup: @administration
     appearance {
         pageTemplate: @/standard
@@ -15,23 +15,22 @@ page 10 (
         formAutoComplete: false
     }
 
-    region lists (
-        name: To-Do Lists
+    region groups (
+        name: List Groups
         type: interactiveGrid
         source {
             location: localDatabase
             type: sqlQuery
             sqlQuery:
                 ```sql
-                select list_id,
-                       list_name,
-                       group_id,
+                select group_id,
+                       group_name,
                        display_order,
                        created_by,
                        created_on,
                        updated_by,
                        updated_on
-                  from todo_lists
+                  from todo_list_groups
                 ```
         }
         layout {
@@ -57,9 +56,6 @@ page 10 (
         toolbar {
             controls: saveButton
         }
-        advanced {
-            savedReportMappingIdentifier: 18452184611528039192
-        }
 
         savedReport primary (
             visibility: primary
@@ -68,26 +64,62 @@ page 10 (
             }
 
             displayColumn (
-                column: @list_name
+                column: @group_name
                 layout {
                     sequence: 10
                 }
             )
 
             displayColumn (
-                column: @group_id
+                column: @display_order
                 layout {
                     sequence: 20
                 }
             )
 
-            displayColumn (
-                column: @display_order
-                layout {
-                    sequence: 30
-                }
-            )
+        )
 
+        column group_id (
+            type: textField
+            heading {
+                heading: group id
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: GROUP_ID
+                dataType: number
+                primaryKey: true
+            }
+        )
+
+        column group_name (
+            type: textField
+            heading {
+                heading: Group Name
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: GROUP_NAME
+                dataType: varchar2
+            }
+        )
+
+        column display_order (
+            type: textField
+            heading {
+                heading: Order
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DISPLAY_ORDER
+                dataType: number
+            }
         )
 
         column created_by (
@@ -117,67 +149,6 @@ page 10 (
                 databaseColumn: CREATED_ON
                 dataType: date
                 queryOnly: true
-            }
-        )
-
-        column display_order (
-            type: textField
-            heading {
-                heading: Order
-            }
-            layout {
-                sequence: 30
-            }
-            source {
-                databaseColumn: DISPLAY_ORDER
-                dataType: number
-            }
-        )
-
-        column list_id (
-            type: textField
-            heading {
-                heading: list id
-            }
-            layout {
-                sequence: 10
-            }
-            source {
-                databaseColumn: LIST_ID
-                dataType: number
-                primaryKey: true
-            }
-        )
-
-        column list_name (
-            type: textField
-            heading {
-                heading: List Name
-            }
-            layout {
-                sequence: 20
-            }
-            source {
-                databaseColumn: LIST_NAME
-                dataType: varchar2
-            }
-        )
-
-        column group_id (
-            type: selectList
-            heading {
-                heading: Group
-            }
-            layout {
-                sequence: 25
-            }
-            lov {
-                type: sharedComponent
-                lov: @todo-list-groups
-            }
-            source {
-                databaseColumn: GROUP_ID
-                dataType: number
             }
         )
 
@@ -213,17 +184,13 @@ page 10 (
 
     )
 
-    process lists-save (
+    process groups-save (
         name: Save Interactive Grid Data
         type: interactiveGridAutoRowProcessing
-        editableRegion: @lists
+        editableRegion: @groups
         execution {
             sequence: 10
-        }
-        advanced {
-            executionMappingIdentifier: 18452184964506039193
         }
     )
 
 )
-

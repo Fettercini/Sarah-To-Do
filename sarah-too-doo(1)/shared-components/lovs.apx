@@ -35,3 +35,21 @@ lov todo-lists (
     }
 )
 
+lov todo-list-groups (
+    name: TODO_LIST_GROUPS
+
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select group_name d,
+                   group_id r
+              from todo_list_groups
+             order by display_order, group_name
+            ```
+    }
+    columnMapping {
+        return: R
+    }
+)
+
