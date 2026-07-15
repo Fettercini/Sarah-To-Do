@@ -10,6 +10,9 @@ page 110 (
     css {
         inline:
             ```css
+            html {
+                font-size: clamp(14px, 1.1vw + 0.6vh, 22px);
+            }
             body.t-Body,
             .t-PageBody,
             .t-Body-contentInner,
@@ -17,40 +20,26 @@ page 110 (
                 background-color: #121212 !important;
                 color: #e8e8e8 !important;
             }
-            .kiosk-card,
-            .kiosk-card * {
-                background-color: #1e1e1e !important;
-                color: #f0f0f0 !important;
-            }
             .kiosk-card {
+                background-color: #1e1e1e !important;
                 border-color: #333333 !important;
+                cursor: pointer;
             }
             .kiosk-card:hover {
                 background-color: #262626 !important;
-            }
-            .t-Button {
-                background-color: #2a2a2a;
-                color: #e8e8e8;
-                border-color: #444444;
-            }
-            .t-Button--hot,
-            .t-Button.is-active {
-                background-color: #0d6efd;
-                border-color: #0d6efd;
-                color: #ffffff;
             }
 
             .task-row {
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                padding: 6px 2px;
+                gap: clamp(12px, 2vw, 24px);
+                padding: clamp(10px, 1.5vh, 20px) clamp(6px, 1.5vw, 16px);
                 animation: taskFadeIn 0.35s ease;
             }
             .task-check {
                 flex-shrink: 0;
-                width: 28px;
-                height: 28px;
+                width: clamp(28px, 4vw, 48px);
+                height: clamp(28px, 4vw, 48px);
                 border-radius: 6px;
                 border: 2px solid #777777;
                 background-color: transparent;
@@ -69,11 +58,12 @@ page 110 (
                 align-items: center;
                 justify-content: center;
                 color: #ffffff !important;
-                font-size: 16px;
+                font-size: clamp(16px, 2.2vw, 26px);
                 font-weight: bold;
             }
             .task-text {
-                font-size: 1.15rem;
+                font-size: clamp(1.05rem, 1vw + 0.8rem, 1.7rem);
+                color: #f0f0f0 !important;
                 transition: opacity 0.35s ease;
             }
             .task-text--done {
@@ -89,6 +79,17 @@ page 110 (
                     opacity: 1;
                     transform: translateY(0);
                 }
+            }
+            .t-Button {
+                background-color: #2a2a2a;
+                color: #e8e8e8;
+                border-color: #444444;
+            }
+            .t-Button--hot,
+            .t-Button.is-active {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                color: #ffffff;
             }
             ```
     }
@@ -189,7 +190,7 @@ page 110 (
         when {
             event: click
             selectionType: jQuerySelector
-            jquerySelector: .task-row
+            jquerySelector: .kiosk-card
         }
 
         action optimistic-toggle (
@@ -197,7 +198,8 @@ page 110 (
             settings {
                 jsCode:
                     ```javascript-browser
-                    var $row = $( this.triggeringElement );
+                    var $card = $( this.triggeringElement );
+                    var $row = $card.find( ".task-row" );
                     var $check = $row.find( ".task-check" );
                     var $text = $row.find( ".task-text" );
                     var nowComplete = !$check.hasClass( "task-check--done" );
