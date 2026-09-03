@@ -103,6 +103,29 @@ page 15 (
         }
     )
 
+    button new-group (
+        buttonName: NEW_GROUP
+        label: + New Group
+        layout {
+            sequence: 35
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            warnOnUnsavedChanges: doNotCheck
+            target: {
+                page: 35
+                clearCache: 35
+            }
+        }
+    )
+
     pageItem P15_LIST_ID (
         type: hidden
         layout {
@@ -239,6 +262,48 @@ page 15 (
             type: itemIsNotNull
             item: P15_LIST_ID
         }
+    )
+
+    dynamicAction sync-new-group (
+        name: Sync New Group
+        execution {
+            sequence: 20
+        }
+        when {
+            event: apexafterclosedialog
+            selectionType: region
+            region: @form
+        }
+
+        action pull-new-group-id (
+            action: executeServerSideCode
+            settings {
+                plsqlCode:
+                    ```plsql
+                    :P15_GROUP_ID := apex_util.get_session_state('P35_GROUP_ID');
+                    ```
+                itemsToReturn: P15_GROUP_ID
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+        action refresh-group-dropdown (
+            action: refresh
+            affectedElements {
+                selectionType: items
+                items: [
+                    P15_GROUP_ID
+                ]
+            }
+            execution {
+                sequence: 20
+                fireOnInit: false
+            }
+        )
+
     )
 
     dynamicAction cancel-dialog (
