@@ -24,6 +24,8 @@ app SARAH-TOO-DOO (
     }
     navigationBar {
         list: @navigation-menu
+        listTemplate: @/navigation-bar
+        templateOptions: #DEFAULT#
     }
     userInterface {
         currentTheme: @universal-theme
