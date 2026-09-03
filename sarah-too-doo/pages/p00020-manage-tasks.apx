@@ -164,8 +164,8 @@ page 20 (
         }
         when {
             event: apexafterclosedialog
-            selectionType: region
-            region: @tasks
+            selectionType: domObject
+            domObject: body
         }
 
         action refresh-tasks (

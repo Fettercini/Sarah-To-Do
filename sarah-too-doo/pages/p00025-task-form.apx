@@ -239,6 +239,28 @@ page 25 (
         }
     )
 
+    button create-and-new (
+        buttonName: CREATE_AND_NEW
+        label: Create & Add Another
+        layout {
+            sequence: 45
+            region: @buttons
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            warnOnUnsavedChanges: doNotCheck
+            databaseAction: insert
+        }
+        serverSideCondition {
+            type: itemIsNull
+            item: P25_TASK_ID
+        }
+    )
+
     button delete (
         buttonName: DELETE
         label: Delete
@@ -367,6 +389,25 @@ page 25 (
         }
         advanced {
             executionMappingIdentifier: 18502122759278252793
+        }
+    )
+
+    process reset-form-for-next-task (
+        name: Reset Form for Next Task
+        type: executeCode
+        source {
+            plsqlCode:
+                ```plsql
+                :P25_TASK_ID := null;
+                :P25_TASK_NAME := null;
+                ```
+        }
+        execution {
+            sequence: 20
+        }
+        serverSideCondition {
+            type: request=Value
+            value: CREATE_AND_NEW
         }
     )
 

@@ -147,8 +147,8 @@ page 10 (
         }
         when {
             event: apexafterclosedialog
-            selectionType: region
-            region: @lists
+            selectionType: domObject
+            domObject: body
         }
 
         action refresh-lists (

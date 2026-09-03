@@ -128,8 +128,8 @@ page 30 (
         }
         when {
             event: apexafterclosedialog
-            selectionType: region
-            region: @groups
+            selectionType: domObject
+            domObject: body
         }
 
         action refresh-groups (
