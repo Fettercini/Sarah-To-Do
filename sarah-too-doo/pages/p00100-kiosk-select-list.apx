@@ -52,11 +52,25 @@ page 100 (
                 background-color: #1a1a1a !important;
             }
             .kiosk-filter-card {
-                min-height: clamp(48px, 6vh, 90px) !important;
+                min-height: unset !important;
+                background-color: transparent !important;
+                border: 2px solid #555555 !important;
+                border-radius: 999px !important;
+            }
+            .kiosk-filter-card .kiosk-title {
+                font-size: clamp(0.9rem, 0.8vw + 0.65rem, 1.3rem);
+                font-weight: 500;
+                padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 18px);
+            }
+            .kiosk-filter-card:hover {
+                background-color: #1e1e1e !important;
             }
             .kiosk-filter-card--active {
                 background-color: #0d6efd !important;
                 border-color: #0d6efd !important;
+            }
+            .kiosk-filter-card--active .kiosk-title {
+                font-weight: 700;
             }
             .kiosk-title {
                 font-size: clamp(1.1rem, 1.2vw + 0.9rem, 2rem);
@@ -111,10 +125,7 @@ page 100 (
         }
         appearance {
             template: @/cards-container
-            templateOptions: [
-                #DEFAULT#
-                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
-            ]
+            templateOptions: #DEFAULT#
         }
         card {
             cssClasses: [
@@ -210,7 +221,7 @@ page 100 (
                     ```javascript-browser
                     var $card = $( this.triggeringElement );
                     var $title = $card.find( ".kiosk-title" );
-                    $card.siblings( ".kiosk-filter-card" ).removeClass( "kiosk-filter-card--active" );
+                    $( ".kiosk-filter-card" ).removeClass( "kiosk-filter-card--active" );
                     $card.addClass( "kiosk-filter-card--active" );
                     apex.item( "P100_GROUP_ID" ).setValue( $title.data( "groupId" ) );
                     ```
