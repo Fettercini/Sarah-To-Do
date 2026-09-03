@@ -121,7 +121,7 @@ page 10 (
         layout {
             sequence: 10
             region: @lists
-            slot: copy
+            slot: rightOfTitle
         }
         appearance {
             buttonTemplate: @/text

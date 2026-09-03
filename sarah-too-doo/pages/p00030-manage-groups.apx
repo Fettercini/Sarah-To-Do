@@ -102,7 +102,7 @@ page 30 (
         layout {
             sequence: 10
             region: @groups
-            slot: copy
+            slot: rightOfTitle
         }
         appearance {
             buttonTemplate: @/text

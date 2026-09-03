@@ -107,9 +107,6 @@ page 110 (
     region back-link (
         name: Back
         type: staticContent
-        source {
-            htmlCode: <a href="f?p=&APP_ID.:100:&SESSION.">&lt; Back to Lists</a>
-        }
         layout {
             sequence: 5
             slot: body
@@ -121,6 +118,27 @@ page 110 (
                 t-Region--removeHeader js-removeLandmark
                 t-Region--scrollBody
             ]
+        }
+    )
+
+    button back-to-lists (
+        buttonName: BACK
+        label: Back to Lists
+        layout {
+            sequence: 10
+            region: @back-link
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+            icon: fa-chevron-left
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 100
+            }
         }
     )
 
