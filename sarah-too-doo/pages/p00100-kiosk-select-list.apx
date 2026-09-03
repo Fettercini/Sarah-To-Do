@@ -4,14 +4,20 @@ page 100 (
     title: Sarah-Too-Doo
     pageGroup: @kiosk
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
     }
     css {
         inline:
             ```css
             html {
                 font-size: clamp(14px, 1.1vw + 0.6vh, 22px);
+            }
+            #t_Header {
+                display: none;
             }
             body.t-Body,
             .t-PageBody,
@@ -53,21 +59,10 @@ page 100 (
             }
             ```
     }
-    navigation {
-        cursorFocus: doNotFocusCursor
-    }
     security {
         authentication: public
         formAutoComplete: false
     }
-
-    pageItem P100_GROUP_ID (
-        type: hidden
-        layout {
-            sequence: 10
-            slot: body
-        }
-    )
 
     region group-filter (
         name: Filter by Group
@@ -101,16 +96,11 @@ page 100 (
             ]
         }
         card {
-            cssClasses: [
-                kiosk-card
-            ]
+            cssClasses: kiosk-card
         }
         title {
             advancedFormatting: true
-            htmlExpression:
-                ```html
-                <div class="kiosk-title">&GROUP_NAME!HTML.</div>
-                ```
+            htmlExpression: <div class="kiosk-title">&GROUP_NAME!HTML.</div>
         }
 
         action select-group (
@@ -158,16 +148,11 @@ page 100 (
             ]
         }
         card {
-            cssClasses: [
-                kiosk-card
-            ]
+            cssClasses: kiosk-card
         }
         title {
             advancedFormatting: true
-            htmlExpression:
-                ```html
-                <div class="kiosk-title">&LIST_NAME!HTML.</div>
-                ```
+            htmlExpression: <div class="kiosk-title">&LIST_NAME!HTML.</div>
         }
 
         action open-list (
@@ -188,4 +173,13 @@ page 100 (
 
     )
 
+    pageItem P100_GROUP_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+
 )
+

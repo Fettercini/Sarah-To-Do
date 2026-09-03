@@ -18,6 +18,24 @@ lov boolean (
 
 )
 
+lov todo-list-groups (
+    name: TODO_LIST_GROUPS
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select group_name d,
+                   group_id r
+              from todo_list_groups
+             order by display_order, group_name
+            ```
+    }
+    columnMapping {
+        return: R
+        display: D
+    }
+)
+
 lov todo-lists (
     name: TODO_LISTS
     source {
@@ -32,24 +50,7 @@ lov todo-lists (
     }
     columnMapping {
         return: R
-    }
-)
-
-lov todo-list-groups (
-    name: TODO_LIST_GROUPS
-
-    source {
-        type: sqlQuery
-        sqlQuery:
-            ```sql
-            select group_name d,
-                   group_id r
-              from todo_list_groups
-             order by display_order, group_name
-            ```
-    }
-    columnMapping {
-        return: R
+        display: D
     }
 )
 

@@ -60,7 +60,66 @@ list navigation-bar (
 )
 
 list navigation-menu (
-    name: Navigation Menu
+    name: Lists/Groups/Tasks - Nav
+
+    entry create-group (
+        label: Create
+        icon {
+            imageIconCssClasses: fa-plus
+        }
+        layout {
+            sequence: 70
+        }
+        link {
+            target: {
+                page: 35
+            }
+        }
+        serverSideCondition {
+            type: currentPage=page
+            page: 30
+        }
+    )
+
+    entry create-list (
+        label: Create
+        icon {
+            imageIconCssClasses: fa-plus
+        }
+        layout {
+            sequence: 50
+        }
+        link {
+            target: {
+                page: 15
+                clearCache: 15
+            }
+        }
+        serverSideCondition {
+            type: currentPage=page
+            page: 10
+        }
+    )
+
+    entry create-task (
+        label: Create
+        icon {
+            imageIconCssClasses: fa-plus
+        }
+        layout {
+            sequence: 60
+        }
+        link {
+            target: {
+                page: 25
+                clearCache: 25
+            }
+        }
+        serverSideCondition {
+            type: currentPage=page
+            page: 20
+        }
+    )
 
     entry home (
         label: Home
@@ -73,6 +132,42 @@ list navigation-menu (
         link {
             target: {
                 page: 1
+                clearCache: 1
+            }
+        }
+    )
+
+    entry lists (
+        label: Manage
+        icon {
+            imageIconCssClasses: fa-list
+        }
+        layout {
+            sequence: 15
+        }
+        isCurrent {
+            type: never
+        }
+        link {
+            target: {
+                page: 5
+                clearCache: 5
+            }
+        }
+    )
+
+    entry manage-groups (
+        label: Manage Groups
+        icon {
+            imageIconCssClasses: fa-object-group
+        }
+        layout {
+            sequence: 40
+            parentEntry: @lists
+        }
+        link {
+            target: {
+                page: 30
             }
         }
     )
@@ -84,6 +179,7 @@ list navigation-menu (
         }
         layout {
             sequence: 20
+            parentEntry: @lists
         }
         link {
             target: {
@@ -99,25 +195,11 @@ list navigation-menu (
         }
         layout {
             sequence: 30
+            parentEntry: @lists
         }
         link {
             target: {
                 page: 20
-            }
-        }
-    )
-
-    entry manage-groups (
-        label: Manage Groups
-        icon {
-            imageIconCssClasses: fa-object-group
-        }
-        layout {
-            sequence: 40
-        }
-        link {
-            target: {
-                page: 30
             }
         }
     )

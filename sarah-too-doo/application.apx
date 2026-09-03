@@ -13,23 +13,23 @@ app SARAH-TOO-DOO (
         }
     }
     navigationMenu {
-        listTemplate: @/side-navigation-menu
+        listTemplate: @/top-navigation-tabs
         templateOptions: [
             #DEFAULT#
-            t-TreeNav--styleA
-            js-navCollapsed--hidden
+            t-NavTabs--stacked
+            t-NavTabs--displayLabels-sm
         ]
+        listPosition: top
         list: @navigation-menu
     }
     navigationBar {
-        list: @navigation-bar
-        listTemplate: @/navigation-bar
-        templateOptions: #DEFAULT#
+        list: @navigation-menu
     }
     userInterface {
         currentTheme: @universal-theme
         globalPage: 0
         addBuiltWithApexToFooter: false
+        autoDismissSuccessMessages: true
     }
     appFormatMasks {
         date: DS

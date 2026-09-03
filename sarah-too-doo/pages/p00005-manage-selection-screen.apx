@@ -1,0 +1,75 @@
+page 5 (
+    name: Manage Selection Screen
+    alias: MANAGE-SELECTION-SCREEN
+    title: Manage Selection Screen
+    appearance {
+        pageTemplate: @standard-no-header
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region employees_1 (
+        name: Management Selection
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Manage Lists' display,
+                                10 PAGE_NUM
+                 from dual
+                 union
+                 select 'Manage Tasks' display,
+                                20 PAGE_NUM
+                 from dual
+                 union
+                 select 'Manage Groups' display,
+                                 30 PAGE_NUM
+                 from dual;
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: [
+                #DEFAULT#
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
+        }
+        advanced {
+            customAttributes: style="text-align:center"
+        }
+        componentAppearance {
+            layout: horizontal
+        }
+        title {
+            column: DISPLAY
+        }
+
+        action action (
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                target: {
+                    page: &PAGE_NUM.
+                    clearCache: &PAGE_NUM.
+                }
+            }
+        )
+
+    )
+
+)
+

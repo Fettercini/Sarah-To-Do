@@ -3,7 +3,7 @@ page 1 (
     alias: HOME
     title: Sarah-Too-Doo
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
     }
     navigation {

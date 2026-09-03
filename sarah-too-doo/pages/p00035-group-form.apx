@@ -23,7 +23,7 @@ page 35 (
         type: staticContent
         layout {
             sequence: 20
-            slot: REGION_POSITION_03
+            slot: dialogFooter
         }
         appearance {
             template: @/buttons-container
@@ -48,6 +48,30 @@ page 35 (
         }
         edit {
             enabled: true
+        }
+    )
+
+    pageItem P35_DISPLAY_ORDER (
+        type: numberField
+        label {
+            label: Order
+            alignment: left
+        }
+        layout {
+            sequence: 30
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+            width: 10
+        }
+        source {
+            formRegion: @form
+            column: DISPLAY_ORDER
+            dataType: number
         }
     )
 
@@ -88,8 +112,8 @@ page 35 (
             width: 32
         }
         validation {
-            maxLength: 200
             valueRequired: true
+            maxLength: 200
         }
         source {
             formRegion: @form
@@ -98,27 +122,26 @@ page 35 (
         }
     )
 
-    pageItem P35_DISPLAY_ORDER (
-        type: numberField
-        label {
-            label: Order
-            alignment: left
-        }
+    button apply-changes (
+        buttonName: APPLY-CHANGES
+        label: Apply Changes
         layout {
             sequence: 30
-            region: @form
-            slot: regionBody
-            alignment: left
+            region: @buttons
+            slot: next
         }
         appearance {
-            template: @/optional-floating
+            buttonTemplate: @/text
+            hot: true
             templateOptions: #DEFAULT#
-            width: 10
         }
-        source {
-            formRegion: @form
-            column: DISPLAY_ORDER
-            dataType: number
+        behavior {
+            warnOnUnsavedChanges: doNotCheck
+            databaseAction: update
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P35_GROUP_ID
         }
     )
 
@@ -128,7 +151,7 @@ page 35 (
         layout {
             sequence: 10
             region: @buttons
-            slot: CLOSE
+            slot: close
         }
         appearance {
             buttonTemplate: @/text
@@ -145,7 +168,7 @@ page 35 (
         layout {
             sequence: 40
             region: @buttons
-            slot: NEXT
+            slot: next
         }
         appearance {
             buttonTemplate: @/text
@@ -168,7 +191,7 @@ page 35 (
         layout {
             sequence: 20
             region: @buttons
-            slot: DELETE
+            slot: delete
         }
         appearance {
             buttonTemplate: @/text
@@ -183,29 +206,6 @@ page 35 (
         confirmation {
             message: Delete this group? Lists in this group will not be deleted; they will just be ungrouped.
             style: danger
-        }
-        serverSideCondition {
-            type: itemIsNotNull
-            item: P35_GROUP_ID
-        }
-    )
-
-    button apply-changes (
-        buttonName: APPLY-CHANGES
-        label: Apply Changes
-        layout {
-            sequence: 30
-            region: @buttons
-            slot: NEXT
-        }
-        appearance {
-            buttonTemplate: @/text
-            hot: true
-            templateOptions: #DEFAULT#
-        }
-        behavior {
-            warnOnUnsavedChanges: doNotCheck
-            databaseAction: update
         }
         serverSideCondition {
             type: itemIsNotNull
@@ -240,6 +240,9 @@ page 35 (
         execution {
             sequence: 50
         }
+        advanced {
+            executionMappingIdentifier: 18502124847400252796
+        }
         serverSideCondition {
             type: requestIsContainedInValue
             value: CREATE,APPLY-CHANGES,DELETE
@@ -254,6 +257,9 @@ page 35 (
             sequence: 10
             point: beforeHeader
         }
+        advanced {
+            executionMappingIdentifier: 18502124903452252796
+        }
     )
 
     process process-form-form (
@@ -263,6 +269,10 @@ page 35 (
         execution {
             sequence: 10
         }
+        advanced {
+            executionMappingIdentifier: 18502125053896252796
+        }
     )
 
 )
+

@@ -4,7 +4,7 @@ page 20 (
     title: Manage Tasks
     pageGroup: @administration
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
     }
     navigation {
@@ -14,19 +14,6 @@ page 20 (
         pageAccessProtection: argumentsMustHaveChecksum
         formAutoComplete: false
     }
-
-    region toolbar (
-        name: Toolbar
-        type: staticContent
-        layout {
-            sequence: 5
-            slot: body
-        }
-        appearance {
-            template: @/blank-with-attributes
-            templateOptions: #DEFAULT#
-        }
-    )
 
     region tasks (
         name: Tasks
@@ -70,7 +57,55 @@ page 20 (
             type: rowRangesXToYNoPagination
         }
 
-        column task_id (
+        column DISPLAY_ORDER (
+            reportColumnQueryId: 5
+            derivedColumn: N
+            heading {
+                heading: Display Order
+                alignment: center
+            }
+            layout {
+                sequence: 50
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column IS_COMPLETE (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Is Complete
+                alignment: center
+            }
+            layout {
+                sequence: 40
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column LIST_NAME (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: List Name
+                alignment: center
+            }
+            layout {
+                sequence: 30
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column TASK_ID (
             reportColumnQueryId: 1
             derivedColumn: N
             type: hidden
@@ -79,66 +114,19 @@ page 20 (
             }
         )
 
-        column task_name (
+        column TASK_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
-            type: link
             heading {
-                heading: Task
-                alignment: start
-            }
-            layout {
-                sequence: 20
-                columnAlignment: start
-            }
-            link {
-                target: {
-                    page: 25
-                    items: {
-                        P25_TASK_ID: #TASK_ID#
-                    }
-                    clearCache: 25
-                }
-                linkText: #TASK_NAME#
-            }
-        )
-
-        column list_name (
-            reportColumnQueryId: 3
-            derivedColumn: N
-            heading {
-                heading: List
-                alignment: start
-            }
-            layout {
-                sequence: 30
-                columnAlignment: start
-            }
-        )
-
-        column is_complete (
-            reportColumnQueryId: 4
-            derivedColumn: N
-            heading {
-                heading: Complete
+                heading: Task Name
                 alignment: center
             }
             layout {
-                sequence: 40
+                sequence: 20
                 columnAlignment: center
             }
-        )
-
-        column display_order (
-            reportColumnQueryId: 5
-            derivedColumn: N
-            heading {
-                heading: Order
-                alignment: end
-            }
-            layout {
-                sequence: 50
-                columnAlignment: end
+            sorting {
+                sortable: false
             }
         )
 
@@ -149,8 +137,8 @@ page 20 (
         label: Add Task
         layout {
             sequence: 10
-            region: @toolbar
-            slot: next
+            region: @tasks
+            slot: copy
         }
         appearance {
             buttonTemplate: @/text
@@ -163,6 +151,9 @@ page 20 (
                 page: 25
                 clearCache: 25
             }
+        }
+        config {
+            buildOption: @commented-out
         }
     )
 
@@ -192,3 +183,4 @@ page 20 (
     )
 
 )
+

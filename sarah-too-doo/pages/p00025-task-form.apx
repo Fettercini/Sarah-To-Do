@@ -23,7 +23,7 @@ page 25 (
         type: staticContent
         layout {
             sequence: 20
-            slot: REGION_POSITION_03
+            slot: dialogFooter
         }
         appearance {
             template: @/buttons-container
@@ -48,6 +48,61 @@ page 25 (
         }
         edit {
             enabled: true
+        }
+    )
+
+    pageItem P25_DISPLAY_ORDER (
+        type: numberField
+        label {
+            label: Order
+            alignment: left
+        }
+        layout {
+            sequence: 40
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+            width: 10
+        }
+        source {
+            formRegion: @form
+            column: DISPLAY_ORDER
+            dataType: number
+        }
+    )
+
+    pageItem P25_LIST_ID (
+        type: selectList
+        label {
+            label: List
+            alignment: left
+        }
+        lov {
+            type: sharedComponent
+            lov: @todo-lists
+            displayExtraValues: false
+        }
+        layout {
+            sequence: 30
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+        }
+        validation {
+            valueRequired: true
+        }
+        source {
+            formRegion: @form
+            column: LIST_ID
+            dataType: number
         }
     )
 
@@ -88,8 +143,8 @@ page 25 (
             width: 32
         }
         validation {
-            maxLength: 500
             valueRequired: true
+            maxLength: 500
         }
         source {
             formRegion: @form
@@ -98,58 +153,26 @@ page 25 (
         }
     )
 
-    pageItem P25_LIST_ID (
-        type: selectList
-        label {
-            label: List
-            alignment: left
-        }
-        lov {
-            type: sharedComponent
-            lov: @todo-lists
-            displayExtraValues: false
-        }
+    button apply-changes (
+        buttonName: APPLY-CHANGES
+        label: Apply Changes
         layout {
             sequence: 30
-            region: @form
-            slot: regionBody
-            alignment: left
+            region: @buttons
+            slot: next
         }
         appearance {
-            template: @/required-floating
+            buttonTemplate: @/text
+            hot: true
             templateOptions: #DEFAULT#
         }
-        validation {
-            valueRequired: true
+        behavior {
+            warnOnUnsavedChanges: doNotCheck
+            databaseAction: update
         }
-        source {
-            formRegion: @form
-            column: LIST_ID
-            dataType: number
-        }
-    )
-
-    pageItem P25_DISPLAY_ORDER (
-        type: numberField
-        label {
-            label: Order
-            alignment: left
-        }
-        layout {
-            sequence: 40
-            region: @form
-            slot: regionBody
-            alignment: left
-        }
-        appearance {
-            template: @/optional-floating
-            templateOptions: #DEFAULT#
-            width: 10
-        }
-        source {
-            formRegion: @form
-            column: DISPLAY_ORDER
-            dataType: number
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P25_TASK_ID
         }
     )
 
@@ -159,7 +182,7 @@ page 25 (
         layout {
             sequence: 10
             region: @buttons
-            slot: CLOSE
+            slot: close
         }
         appearance {
             buttonTemplate: @/text
@@ -176,7 +199,7 @@ page 25 (
         layout {
             sequence: 40
             region: @buttons
-            slot: NEXT
+            slot: next
         }
         appearance {
             buttonTemplate: @/text
@@ -199,7 +222,7 @@ page 25 (
         layout {
             sequence: 20
             region: @buttons
-            slot: DELETE
+            slot: delete
         }
         appearance {
             buttonTemplate: @/text
@@ -214,29 +237,6 @@ page 25 (
         confirmation {
             message: Delete this task?
             style: danger
-        }
-        serverSideCondition {
-            type: itemIsNotNull
-            item: P25_TASK_ID
-        }
-    )
-
-    button apply-changes (
-        buttonName: APPLY-CHANGES
-        label: Apply Changes
-        layout {
-            sequence: 30
-            region: @buttons
-            slot: NEXT
-        }
-        appearance {
-            buttonTemplate: @/text
-            hot: true
-            templateOptions: #DEFAULT#
-        }
-        behavior {
-            warnOnUnsavedChanges: doNotCheck
-            databaseAction: update
         }
         serverSideCondition {
             type: itemIsNotNull
@@ -271,6 +271,9 @@ page 25 (
         execution {
             sequence: 50
         }
+        advanced {
+            executionMappingIdentifier: 18502122585386252793
+        }
         serverSideCondition {
             type: requestIsContainedInValue
             value: CREATE,APPLY-CHANGES,DELETE
@@ -285,6 +288,9 @@ page 25 (
             sequence: 10
             point: beforeHeader
         }
+        advanced {
+            executionMappingIdentifier: 18502122602458252793
+        }
     )
 
     process process-form-form (
@@ -294,6 +300,10 @@ page 25 (
         execution {
             sequence: 10
         }
+        advanced {
+            executionMappingIdentifier: 18502122759278252793
+        }
     )
 
 )
+

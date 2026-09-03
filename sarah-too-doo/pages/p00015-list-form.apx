@@ -23,7 +23,7 @@ page 15 (
         type: staticContent
         layout {
             sequence: 20
-            slot: REGION_POSITION_03
+            slot: dialogFooter
         }
         appearance {
             template: @/buttons-container
@@ -48,6 +48,58 @@ page 15 (
         }
         edit {
             enabled: true
+        }
+    )
+
+    pageItem P15_DISPLAY_ORDER (
+        type: numberField
+        label {
+            label: Order
+            alignment: left
+        }
+        layout {
+            sequence: 40
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+            width: 10
+        }
+        source {
+            formRegion: @form
+            column: DISPLAY_ORDER
+            dataType: number
+        }
+    )
+
+    pageItem P15_GROUP_ID (
+        type: selectList
+        label {
+            label: Group
+            alignment: left
+        }
+        lov {
+            type: sharedComponent
+            lov: @todo-list-groups
+            displayExtraValues: false
+        }
+        layout {
+            sequence: 30
+            region: @form
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            formRegion: @form
+            column: GROUP_ID
+            dataType: number
         }
     )
 
@@ -88,8 +140,8 @@ page 15 (
             width: 32
         }
         validation {
-            maxLength: 200
             valueRequired: true
+            maxLength: 200
         }
         source {
             formRegion: @form
@@ -98,55 +150,26 @@ page 15 (
         }
     )
 
-    pageItem P15_GROUP_ID (
-        type: selectList
-        label {
-            label: Group
-            alignment: left
-        }
-        lov {
-            type: sharedComponent
-            lov: @todo-list-groups
-            displayExtraValues: false
-        }
+    button apply-changes (
+        buttonName: APPLY-CHANGES
+        label: Apply Changes
         layout {
             sequence: 30
-            region: @form
-            slot: regionBody
-            alignment: left
+            region: @buttons
+            slot: next
         }
         appearance {
-            template: @/optional-floating
+            buttonTemplate: @/text
+            hot: true
             templateOptions: #DEFAULT#
         }
-        source {
-            formRegion: @form
-            column: GROUP_ID
-            dataType: number
+        behavior {
+            warnOnUnsavedChanges: doNotCheck
+            databaseAction: update
         }
-    )
-
-    pageItem P15_DISPLAY_ORDER (
-        type: numberField
-        label {
-            label: Order
-            alignment: left
-        }
-        layout {
-            sequence: 40
-            region: @form
-            slot: regionBody
-            alignment: left
-        }
-        appearance {
-            template: @/optional-floating
-            templateOptions: #DEFAULT#
-            width: 10
-        }
-        source {
-            formRegion: @form
-            column: DISPLAY_ORDER
-            dataType: number
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P15_LIST_ID
         }
     )
 
@@ -156,7 +179,7 @@ page 15 (
         layout {
             sequence: 10
             region: @buttons
-            slot: CLOSE
+            slot: close
         }
         appearance {
             buttonTemplate: @/text
@@ -173,7 +196,7 @@ page 15 (
         layout {
             sequence: 40
             region: @buttons
-            slot: NEXT
+            slot: next
         }
         appearance {
             buttonTemplate: @/text
@@ -196,7 +219,7 @@ page 15 (
         layout {
             sequence: 20
             region: @buttons
-            slot: DELETE
+            slot: delete
         }
         appearance {
             buttonTemplate: @/text
@@ -211,29 +234,6 @@ page 15 (
         confirmation {
             message: Delete this list? All of its tasks will be deleted too.
             style: danger
-        }
-        serverSideCondition {
-            type: itemIsNotNull
-            item: P15_LIST_ID
-        }
-    )
-
-    button apply-changes (
-        buttonName: APPLY-CHANGES
-        label: Apply Changes
-        layout {
-            sequence: 30
-            region: @buttons
-            slot: NEXT
-        }
-        appearance {
-            buttonTemplate: @/text
-            hot: true
-            templateOptions: #DEFAULT#
-        }
-        behavior {
-            warnOnUnsavedChanges: doNotCheck
-            databaseAction: update
         }
         serverSideCondition {
             type: itemIsNotNull
@@ -268,6 +268,9 @@ page 15 (
         execution {
             sequence: 50
         }
+        advanced {
+            executionMappingIdentifier: 18502119914689252789
+        }
         serverSideCondition {
             type: requestIsContainedInValue
             value: CREATE,APPLY-CHANGES,DELETE
@@ -282,6 +285,9 @@ page 15 (
             sequence: 10
             point: beforeHeader
         }
+        advanced {
+            executionMappingIdentifier: 18502120082681252790
+        }
     )
 
     process process-form-form (
@@ -291,6 +297,10 @@ page 15 (
         execution {
             sequence: 10
         }
+        advanced {
+            executionMappingIdentifier: 18502120193411252790
+        }
     )
 
 )
+

@@ -4,7 +4,7 @@ page 10 (
     title: Manage Lists
     pageGroup: @administration
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
     }
     navigation {
@@ -14,19 +14,6 @@ page 10 (
         pageAccessProtection: argumentsMustHaveChecksum
         formAutoComplete: false
     }
-
-    region toolbar (
-        name: Toolbar
-        type: staticContent
-        layout {
-            sequence: 5
-            slot: body
-        }
-        appearance {
-            template: @/blank-with-attributes
-            templateOptions: #DEFAULT#
-        }
-    )
 
     region lists (
         name: To-Do Lists
@@ -43,7 +30,7 @@ page 10 (
                   from todo_lists l
                   left join todo_list_groups g
                     on g.group_id = l.group_id
-                 order by l.display_order, l.list_name
+                order by l.display_order, l.list_name
                 ```
         }
         layout {
@@ -69,7 +56,39 @@ page 10 (
             type: rowRangesXToYNoPagination
         }
 
-        column list_id (
+        column DISPLAY_ORDER (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Display Order
+                alignment: center
+            }
+            layout {
+                sequence: 40
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column GROUP_NAME (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Group Name
+                alignment: center
+            }
+            layout {
+                sequence: 30
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column LIST_ID (
             reportColumnQueryId: 1
             derivedColumn: N
             type: hidden
@@ -78,53 +97,19 @@ page 10 (
             }
         )
 
-        column list_name (
+        column LIST_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
-            type: link
             heading {
                 heading: List Name
-                alignment: start
+                alignment: center
             }
             layout {
                 sequence: 20
-                columnAlignment: start
+                columnAlignment: center
             }
-            link {
-                target: {
-                    page: 15
-                    items: {
-                        P15_LIST_ID: #LIST_ID#
-                    }
-                    clearCache: 15
-                }
-                linkText: #LIST_NAME#
-            }
-        )
-
-        column group_name (
-            reportColumnQueryId: 3
-            derivedColumn: N
-            heading {
-                heading: Group
-                alignment: start
-            }
-            layout {
-                sequence: 30
-                columnAlignment: start
-            }
-        )
-
-        column display_order (
-            reportColumnQueryId: 4
-            derivedColumn: N
-            heading {
-                heading: Order
-                alignment: end
-            }
-            layout {
-                sequence: 40
-                columnAlignment: end
+            sorting {
+                sortable: false
             }
         )
 
@@ -135,8 +120,8 @@ page 10 (
         label: Add List
         layout {
             sequence: 10
-            region: @toolbar
-            slot: next
+            region: @lists
+            slot: copy
         }
         appearance {
             buttonTemplate: @/text
@@ -149,6 +134,9 @@ page 10 (
                 page: 15
                 clearCache: 15
             }
+        }
+        config {
+            buildOption: @commented-out
         }
     )
 
@@ -178,3 +166,4 @@ page 10 (
     )
 
 )
+

@@ -4,14 +4,20 @@ page 110 (
     title: Sarah-Too-Doo
     pageGroup: @kiosk
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
     }
     css {
         inline:
             ```css
             html {
                 font-size: clamp(14px, 1.1vw + 0.6vh, 22px);
+            }
+            #t_Header {
+                display: none;
             }
             body.t-Body,
             .t-PageBody,
@@ -28,7 +34,7 @@ page 110 (
             .kiosk-card:hover {
                 background-color: #262626 !important;
             }
-
+            
             .task-row {
                 display: flex;
                 align-items: center;
@@ -93,29 +99,10 @@ page 110 (
             }
             ```
     }
-    navigation {
-        cursorFocus: doNotFocusCursor
-    }
     security {
         authentication: public
         formAutoComplete: false
     }
-
-    pageItem P110_LIST_ID (
-        type: hidden
-        layout {
-            sequence: 10
-            slot: body
-        }
-    )
-
-    pageItem P110_TASK_ID (
-        type: hidden
-        layout {
-            sequence: 20
-            slot: body
-        }
-    )
 
     region back-link (
         name: Back
@@ -165,9 +152,7 @@ page 110 (
             ]
         }
         card {
-            cssClasses: [
-                kiosk-card
-            ]
+            cssClasses: kiosk-card
         }
         title {
             advancedFormatting: true
@@ -179,7 +164,22 @@ page 110 (
                 </div>
                 ```
         }
+    )
 
+    pageItem P110_LIST_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+
+    pageItem P110_TASK_ID (
+        type: hidden
+        layout {
+            sequence: 20
+            slot: body
+        }
     )
 
     dynamicAction toggle-task-ajax (
@@ -241,3 +241,4 @@ page 110 (
     )
 
 )
+

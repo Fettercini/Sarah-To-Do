@@ -4,7 +4,7 @@ page 30 (
     title: Manage Groups
     pageGroup: @administration
     appearance {
-        pageTemplate: @/standard
+        pageTemplate: @standard-no-header
         templateOptions: #DEFAULT#
     }
     navigation {
@@ -14,19 +14,6 @@ page 30 (
         pageAccessProtection: argumentsMustHaveChecksum
         formAutoComplete: false
     }
-
-    region toolbar (
-        name: Toolbar
-        type: staticContent
-        layout {
-            sequence: 5
-            slot: body
-        }
-        appearance {
-            template: @/blank-with-attributes
-            templateOptions: #DEFAULT#
-        }
-    )
 
     region groups (
         name: List Groups
@@ -66,7 +53,23 @@ page 30 (
             type: rowRangesXToYNoPagination
         }
 
-        column group_id (
+        column DISPLAY_ORDER (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Display Order
+                alignment: center
+            }
+            layout {
+                sequence: 30
+                columnAlignment: center
+            }
+            sorting {
+                sortable: false
+            }
+        )
+
+        column GROUP_ID (
             reportColumnQueryId: 1
             derivedColumn: N
             type: hidden
@@ -75,40 +78,19 @@ page 30 (
             }
         )
 
-        column group_name (
+        column GROUP_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
-            type: link
             heading {
                 heading: Group Name
-                alignment: start
+                alignment: center
             }
             layout {
                 sequence: 20
-                columnAlignment: start
+                columnAlignment: center
             }
-            link {
-                target: {
-                    page: 35
-                    items: {
-                        P35_GROUP_ID: #GROUP_ID#
-                    }
-                    clearCache: 35
-                }
-                linkText: #GROUP_NAME#
-            }
-        )
-
-        column display_order (
-            reportColumnQueryId: 3
-            derivedColumn: N
-            heading {
-                heading: Order
-                alignment: end
-            }
-            layout {
-                sequence: 30
-                columnAlignment: end
+            sorting {
+                sortable: false
             }
         )
 
@@ -119,8 +101,8 @@ page 30 (
         label: Add Group
         layout {
             sequence: 10
-            region: @toolbar
-            slot: next
+            region: @groups
+            slot: copy
         }
         appearance {
             buttonTemplate: @/text
@@ -133,6 +115,9 @@ page 30 (
                 page: 35
                 clearCache: 35
             }
+        }
+        config {
+            buildOption: @commented-out
         }
     )
 
@@ -162,3 +147,4 @@ page 30 (
     )
 
 )
+
