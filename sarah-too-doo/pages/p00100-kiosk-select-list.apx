@@ -25,6 +25,8 @@ page 100 (
             .t-Region {
                 background-color: #121212 !important;
                 color: #e8e8e8 !important;
+                border: none !important;
+                box-shadow: none !important;
             }
             .kiosk-card {
                 background-color: #1e1e1e !important;
@@ -33,9 +35,28 @@ page 100 (
                 display: flex !important;
                 align-items: center;
                 justify-content: center;
+                transition: transform 0.1s ease, background-color 0.1s ease;
             }
             .kiosk-card:hover {
                 background-color: #2a2a2a !important;
+            }
+            .kiosk-card:active {
+                background-color: #141414 !important;
+                transform: scale(0.97);
+            }
+            .t-Button {
+                transition: transform 0.1s ease, background-color 0.1s ease;
+            }
+            .t-Button:active {
+                transform: scale(0.95);
+                background-color: #1a1a1a !important;
+            }
+            .kiosk-filter-card {
+                min-height: clamp(48px, 6vh, 90px) !important;
+            }
+            .kiosk-filter-card--active {
+                background-color: #0d6efd !important;
+                border-color: #0d6efd !important;
             }
             .kiosk-title {
                 font-size: clamp(1.1rem, 1.2vw + 0.9rem, 2rem);
@@ -96,28 +117,15 @@ page 100 (
             ]
         }
         card {
-            cssClasses: kiosk-card
+            cssClasses: [
+                kiosk-card
+                kiosk-filter-card
+            ]
         }
         title {
             advancedFormatting: true
-            htmlExpression: <div class="kiosk-title">&GROUP_NAME!HTML.</div>
+            htmlExpression: <div class="kiosk-title" data-group-id="&GROUP_ID.">&GROUP_NAME!HTML.</div>
         }
-
-        action select-group (
-            type: fullCard
-            layout {
-                sequence: 10
-            }
-            behavior {
-                target: {
-                    page: 100
-                    items: {
-                        P100_GROUP_ID: &GROUP_ID.
-                    }
-                    clearCache: 100
-                }
-            }
-        )
 
     )
 
@@ -135,6 +143,9 @@ page 100 (
                  where ( :P100_GROUP_ID is null or group_id = :P100_GROUP_ID )
                  order by display_order, list_name
                 ```
+            pageItemsToSubmit: [
+                P100_GROUP_ID
+            ]
         }
         layout {
             sequence: 10
@@ -179,6 +190,49 @@ page 100 (
             sequence: 10
             slot: body
         }
+    )
+
+    dynamicAction filter-lists-by-group (
+        name: Filter Lists by Group
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: jQuerySelector
+            jquerySelector: .kiosk-filter-card
+        }
+
+        action set-group-filter (
+            action: executeJsCode
+            settings {
+                jsCode:
+                    ```javascript-browser
+                    var $card = $( this.triggeringElement );
+                    var $title = $card.find( ".kiosk-title" );
+                    $card.siblings( ".kiosk-filter-card" ).removeClass( "kiosk-filter-card--active" );
+                    $card.addClass( "kiosk-filter-card--active" );
+                    apex.item( "P100_GROUP_ID" ).setValue( $title.data( "groupId" ) );
+                    ```
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+        action refresh-select-list (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @select-list
+            }
+            execution {
+                sequence: 20
+                fireOnInit: false
+            }
+        )
+
     )
 
 )

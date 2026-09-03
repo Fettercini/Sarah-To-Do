@@ -25,16 +25,30 @@ page 110 (
             .t-Region {
                 background-color: #121212 !important;
                 color: #e8e8e8 !important;
+                border: none !important;
+                box-shadow: none !important;
             }
             .kiosk-card {
                 background-color: #1e1e1e !important;
                 border-color: #333333 !important;
                 cursor: pointer;
+                transition: transform 0.1s ease, background-color 0.1s ease;
             }
             .kiosk-card:hover {
                 background-color: #262626 !important;
             }
-            
+            .kiosk-card:active {
+                background-color: #141414 !important;
+                transform: scale(0.97);
+            }
+            .t-Button {
+                transition: transform 0.1s ease, background-color 0.1s ease;
+            }
+            .t-Button:active {
+                transform: scale(0.95);
+                background-color: #1a1a1a !important;
+            }
+
             .task-row {
                 display: flex;
                 align-items: center;
