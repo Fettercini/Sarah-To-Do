@@ -51,7 +51,20 @@ page 100 (
                 transform: scale(0.95);
                 background-color: #1a1a1a !important;
             }
+            *:has(> .kiosk-filter-card) {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                gap: 10px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            *:has(> .kiosk-filter-card)::-webkit-scrollbar {
+                display: none;
+            }
             .kiosk-filter-card {
+                flex: 0 0 auto !important;
                 min-height: unset !important;
                 background-color: transparent !important;
                 border: 2px solid #555555 !important;
@@ -61,6 +74,8 @@ page 100 (
                 font-size: clamp(0.9rem, 0.8vw + 0.65rem, 1.3rem);
                 font-weight: 500;
                 padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 18px);
+                width: auto;
+                white-space: nowrap;
             }
             .kiosk-filter-card:hover {
                 background-color: #1e1e1e !important;
@@ -71,6 +86,15 @@ page 100 (
             }
             .kiosk-filter-card--active .kiosk-title {
                 font-weight: 700;
+            }
+            .kiosk-filter-card:first-child {
+                position: sticky !important;
+                left: 0;
+                z-index: 2;
+                background-color: #121212 !important;
+            }
+            .kiosk-filter-card:first-child.kiosk-filter-card--active {
+                background-color: #0d6efd !important;
             }
             .kiosk-title {
                 font-size: clamp(1.1rem, 1.2vw + 0.9rem, 2rem);
@@ -137,7 +161,6 @@ page 100 (
             advancedFormatting: true
             htmlExpression: <div class="kiosk-title" data-group-id="&GROUP_ID.">&GROUP_NAME!HTML.</div>
         }
-
     )
 
     region select-list (
@@ -154,9 +177,7 @@ page 100 (
                  where ( :P100_GROUP_ID is null or group_id = :P100_GROUP_ID )
                  order by display_order, list_name
                 ```
-            pageItemsToSubmit: [
-                P100_GROUP_ID
-            ]
+            pageItemsToSubmit: P100_GROUP_ID
         }
         layout {
             sequence: 10
@@ -214,6 +235,18 @@ page 100 (
             jquerySelector: .kiosk-filter-card
         }
 
+        action refresh-select-list (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @select-list
+            }
+            execution {
+                sequence: 20
+                fireOnInit: false
+            }
+        )
+
         action set-group-filter (
             action: executeJsCode
             settings {
@@ -228,18 +261,6 @@ page 100 (
             }
             execution {
                 sequence: 10
-                fireOnInit: false
-            }
-        )
-
-        action refresh-select-list (
-            action: refresh
-            affectedElements {
-                selectionType: region
-                region: @select-list
-            }
-            execution {
-                sequence: 20
                 fireOnInit: false
             }
         )

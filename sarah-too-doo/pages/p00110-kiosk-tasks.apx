@@ -48,7 +48,7 @@ page 110 (
                 transform: scale(0.95);
                 background-color: #1a1a1a !important;
             }
-
+            
             .task-row {
                 display: flex;
                 align-items: center;
@@ -135,27 +135,6 @@ page 110 (
         }
     )
 
-    button back-to-lists (
-        buttonName: BACK
-        label: Back to Lists
-        layout {
-            sequence: 10
-            region: @back-link
-            slot: next
-        }
-        appearance {
-            buttonTemplate: @/text
-            templateOptions: #DEFAULT#
-            icon: fa-chevron-left
-        }
-        behavior {
-            action: redirectThisApp
-            target: {
-                page: 100
-            }
-        }
-    )
-
     region tasks (
         name: Task List
         type: cards
@@ -182,6 +161,9 @@ page 110 (
                 #DEFAULT#
                 t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
             ]
+        }
+        componentAppearance {
+            layout: horizontal
         }
         card {
             cssClasses: kiosk-card
@@ -211,6 +193,27 @@ page 110 (
         layout {
             sequence: 20
             slot: body
+        }
+    )
+
+    button back-to-lists (
+        buttonName: BACK
+        label: Back to Lists
+        layout {
+            sequence: 10
+            region: @back-link
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+            icon: fa-chevron-left
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 100
+            }
         }
     )
 

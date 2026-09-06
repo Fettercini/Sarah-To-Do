@@ -106,29 +106,6 @@ page 25 (
         }
     )
 
-    button new-list (
-        buttonName: NEW_LIST
-        label: + New List
-        layout {
-            sequence: 35
-            region: @form
-            slot: regionBody
-            alignment: left
-        }
-        appearance {
-            buttonTemplate: @/text
-            templateOptions: #DEFAULT#
-        }
-        behavior {
-            action: redirectThisApp
-            warnOnUnsavedChanges: doNotCheck
-            target: {
-                page: 15
-                clearCache: 15
-            }
-        }
-    )
-
     pageItem P25_TASK_ID (
         type: hidden
         layout {
@@ -289,46 +266,26 @@ page 25 (
         }
     )
 
-    dynamicAction sync-new-list (
-        name: Sync New List
-        execution {
-            sequence: 20
-        }
-        when {
-            event: apexafterclosedialog
-            selectionType: region
+    button new-list (
+        buttonName: NEW_LIST
+        label: + New List
+        layout {
+            sequence: 35
             region: @form
+            slot: regionBody
         }
-
-        action pull-new-list-id (
-            action: executeServerSideCode
-            settings {
-                plsqlCode:
-                    ```plsql
-                    :P25_LIST_ID := apex_util.get_session_state('P15_LIST_ID');
-                    ```
-                itemsToReturn: P25_LIST_ID
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 15
+                clearCache: 15
             }
-            execution {
-                sequence: 10
-                fireOnInit: false
-            }
-        )
-
-        action refresh-list-dropdown (
-            action: refresh
-            affectedElements {
-                selectionType: items
-                items: [
-                    P25_LIST_ID
-                ]
-            }
-            execution {
-                sequence: 20
-                fireOnInit: false
-            }
-        )
-
+            warnOnUnsavedChanges: doNotCheck
+        }
     )
 
     dynamicAction cancel-dialog (
@@ -346,6 +303,43 @@ page 25 (
             action: cancelDialog
             execution {
                 sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
+    dynamicAction sync-new-list (
+        name: Sync New List
+        execution {
+            sequence: 20
+        }
+        when {
+            event: apexafterclosedialog
+            selectionType: region
+            region: @form
+        }
+
+        action pull-new-list-id (
+            action: executeServerSideCode
+            settings {
+                plsqlCode: :P25_LIST_ID := apex_util.get_session_state('P15_LIST_ID');
+                itemsToReturn: P25_LIST_ID
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+        action refresh-list-dropdown (
+            action: refresh
+            affectedElements {
+                selectionType: items
+                items: P25_LIST_ID
+            }
+            execution {
+                sequence: 20
                 fireOnInit: false
             }
         )
@@ -404,6 +398,9 @@ page 25 (
         }
         execution {
             sequence: 20
+        }
+        advanced {
+            executionMappingIdentifier: 33855324813252604122
         }
         serverSideCondition {
             type: request=Value
