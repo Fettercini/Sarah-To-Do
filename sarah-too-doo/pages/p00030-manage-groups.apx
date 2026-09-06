@@ -81,6 +81,7 @@ page 30 (
         column GROUP_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
+            type: link
             heading {
                 heading: Group Name
                 alignment: center

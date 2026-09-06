@@ -100,6 +100,7 @@ page 10 (
         column LIST_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
+            type: link
             heading {
                 heading: List Name
                 alignment: center

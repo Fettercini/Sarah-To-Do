@@ -117,6 +117,7 @@ page 20 (
         column TASK_NAME (
             reportColumnQueryId: 2
             derivedColumn: N
+            type: link
             heading {
                 heading: Task Name
                 alignment: center
