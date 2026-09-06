@@ -235,6 +235,32 @@ page 110 (
         }
     )
 
+    dynamicAction refresh-tasks-on-timer (
+        name: Refresh Tasks On Timer
+        execution {
+            sequence: 10
+        }
+        when {
+            event: custom
+            customEvent: sarah-todo-tasks-refresh
+            selectionType: jQuerySelector
+            jquerySelector: body
+        }
+
+        action refresh-tasks (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @tasks
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
     dynamicAction reset-tasks-confirm (
         name: Reset Tasks Confirm
         execution {
@@ -258,6 +284,18 @@ page 110 (
             }
         )
 
+        action refresh-tasks-after-reset (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @tasks
+            }
+            execution {
+                sequence: 30
+                fireOnInit: false
+            }
+        )
+
         action reset-tasks-server (
             action: executeServerSideCode
             settings {
@@ -270,25 +308,10 @@ page 110 (
                            updated_on = sysdate
                      where list_id = :P110_LIST_ID;
                     ```
-                itemsToSubmit: [
-                    P110_LIST_ID
-                ]
+                itemsToSubmit: P110_LIST_ID
             }
             execution {
                 sequence: 20
-                fireOnInit: false
-                fireWhenEventResultIs: true
-            }
-        )
-
-        action refresh-tasks-after-reset (
-            action: refresh
-            affectedElements {
-                selectionType: region
-                region: @tasks
-            }
-            execution {
-                sequence: 30
                 fireOnInit: false
             }
         )
@@ -321,36 +344,12 @@ page 110 (
 
     )
 
-    dynamicAction refresh-tasks-on-timer (
-        name: Refresh Tasks On Timer
-        execution {
-            sequence: 10
-        }
-        when {
-            event: custom
-            customEvent: sarah-todo-tasks-refresh
-            selectionType: domObject
-            domObject: body
-        }
-
-        action refresh-tasks (
-            action: refresh
-            affectedElements {
-                selectionType: region
-                region: @tasks
-            }
-            execution {
-                sequence: 10
-                fireOnInit: false
-            }
-        )
-
-    )
-
     dynamicAction toggle-task-ajax (
         name: Toggle Task Complete
         execution {
             sequence: 10
+            eventScope: dynamic
+            staticContainer: body
         }
         when {
             event: click
