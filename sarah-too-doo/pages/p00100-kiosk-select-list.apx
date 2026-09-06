@@ -52,9 +52,7 @@ page 100 (
                 background-color: #1a1a1a !important;
             }
             .a-Cards:has(.kiosk-filter-card),
-            *:has(> .kiosk-filter-card),
-            *:has(> * > .kiosk-filter-card),
-            *:has(> * > * > .kiosk-filter-card) {
+            *:has(> * > .kiosk-filter-card) {
                 display: flex !important;
                 flex-wrap: nowrap !important;
                 overflow-x: auto !important;
@@ -64,9 +62,7 @@ page 100 (
                 -webkit-overflow-scrolling: touch;
             }
             .a-Cards:has(.kiosk-filter-card)::-webkit-scrollbar,
-            *:has(> .kiosk-filter-card)::-webkit-scrollbar,
-            *:has(> * > .kiosk-filter-card)::-webkit-scrollbar,
-            *:has(> * > * > .kiosk-filter-card)::-webkit-scrollbar {
+            *:has(> * > .kiosk-filter-card)::-webkit-scrollbar {
                 display: none;
             }
             .kiosk-filter-card {
