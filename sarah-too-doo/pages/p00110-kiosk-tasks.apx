@@ -250,7 +250,7 @@ page 110 (
             action: confirm
             settings {
                 message: Uncheck all tasks on this list?
-                style: confirmation
+                style: warning
             }
             execution {
                 sequence: 10
