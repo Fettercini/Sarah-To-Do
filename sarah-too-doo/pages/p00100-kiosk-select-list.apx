@@ -58,6 +58,8 @@ page 100 (
                 overflow-x: auto !important;
                 overflow-y: hidden !important;
                 gap: 10px;
+                margin: 0 !important;
+                padding: 0 !important;
                 scrollbar-width: none;
                 -webkit-overflow-scrolling: touch;
             }
@@ -65,9 +67,19 @@ page 100 (
             *:has(> * > .kiosk-filter-card)::-webkit-scrollbar {
                 display: none;
             }
+            *:has(> * > .kiosk-filter-card) > * {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: auto !important;
+                max-width: none !important;
+                flex: 0 0 auto !important;
+            }
             .kiosk-filter-card {
                 flex: 0 0 auto !important;
                 min-height: unset !important;
+                width: auto !important;
+                max-width: none !important;
+                margin: 0 !important;
                 background-color: transparent !important;
                 border: 2px solid #555555 !important;
                 border-radius: 999px !important;
