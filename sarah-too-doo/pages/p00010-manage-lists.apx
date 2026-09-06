@@ -111,6 +111,16 @@ page 10 (
             sorting {
                 sortable: false
             }
+            link {
+                target: {
+                    page: 15
+                    items: {
+                        P15_LIST_ID: #LIST_ID#
+                    }
+                    clearCache: 15
+                }
+                linkText: #LIST_NAME#
+            }
         )
 
     )
@@ -147,8 +157,8 @@ page 10 (
         }
         when {
             event: apexafterclosedialog
-            selectionType: domObject
-            domObject: body
+            selectionType: jQuerySelector
+            jquerySelector: body
         }
 
         action refresh-lists (

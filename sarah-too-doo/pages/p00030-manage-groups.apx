@@ -92,6 +92,16 @@ page 30 (
             sorting {
                 sortable: false
             }
+            link {
+                target: {
+                    page: 35
+                    items: {
+                        P35_GROUP_ID: #GROUP_ID#
+                    }
+                    clearCache: 35
+                }
+                linkText: #GROUP_NAME#
+            }
         )
 
     )
@@ -128,8 +138,8 @@ page 30 (
         }
         when {
             event: apexafterclosedialog
-            selectionType: domObject
-            domObject: body
+            selectionType: jQuerySelector
+            jquerySelector: body
         }
 
         action refresh-groups (
