@@ -217,6 +217,136 @@ page 110 (
         }
     )
 
+    button reset-tasks (
+        buttonName: RESET
+        label: Reset List
+        layout {
+            sequence: 20
+            region: @back-link
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+            icon: fa-undo
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+
+    dynamicAction reset-tasks-confirm (
+        name: Reset Tasks Confirm
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @reset-tasks
+        }
+
+        action confirm-reset (
+            action: confirm
+            settings {
+                message: Uncheck all tasks on this list?
+                style: confirmation
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+        action reset-tasks-server (
+            action: executeServerSideCode
+            settings {
+                plsqlCode:
+                    ```plsql
+                    update todo_tasks
+                       set is_complete = 'N',
+                           completed_on = null,
+                           updated_by = :APP_USER,
+                           updated_on = sysdate
+                     where list_id = :P110_LIST_ID;
+                    ```
+                itemsToSubmit: [
+                    P110_LIST_ID
+                ]
+            }
+            execution {
+                sequence: 20
+                fireOnInit: false
+                fireWhenEventResultIs: true
+            }
+        )
+
+        action refresh-tasks-after-reset (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @tasks
+            }
+            execution {
+                sequence: 30
+                fireOnInit: false
+            }
+        )
+
+    )
+
+    dynamicAction start-tasks-auto-refresh (
+        name: Start Tasks Auto Refresh Timer
+        execution {
+            sequence: 5
+        }
+        when {
+            event: ready
+        }
+
+        action start-timer (
+            action: executeJsCode
+            settings {
+                jsCode:
+                    ```javascript-browser
+                    setInterval( function() {
+                        $( "body" ).trigger( "sarah-todo-tasks-refresh" );
+                    }, 30000 );
+                    ```
+            }
+            execution {
+                sequence: 10
+            }
+        )
+
+    )
+
+    dynamicAction refresh-tasks-on-timer (
+        name: Refresh Tasks On Timer
+        execution {
+            sequence: 10
+        }
+        when {
+            event: custom
+            customEvent: sarah-todo-tasks-refresh
+            selectionType: domObject
+            domObject: body
+        }
+
+        action refresh-tasks (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @tasks
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
     dynamicAction toggle-task-ajax (
         name: Toggle Task Complete
         execution {
