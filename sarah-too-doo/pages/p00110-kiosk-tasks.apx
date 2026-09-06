@@ -156,8 +156,8 @@ page 110 (
         }
     )
 
-    region todo-tasks (
-        name: To Do
+    region tasks (
+        name: Task List
         type: cards
         source {
             location: localDatabase
@@ -169,8 +169,7 @@ page 110 (
                        is_complete
                   from todo_tasks
                  where list_id = :P110_LIST_ID
-                   and is_complete = 'N'
-                 order by display_order asc, task_id asc
+                 order by is_complete asc, display_order asc, task_id asc
                 ```
         }
         layout {
@@ -179,53 +178,10 @@ page 110 (
         }
         appearance {
             template: @/cards-container
-            templateOptions: #DEFAULT#
-        }
-        componentAppearance {
-            gridColumns: 2
-        }
-        card {
-            cssClasses: kiosk-card
-        }
-        title {
-            advancedFormatting: true
-            htmlExpression:
-                ```html
-                <div class="task-row" data-task-id="&TASK_ID.">
-                    <span class="task-check{if IS_COMPLETE/} task-check--done{endif/}"></span>
-                    <span class="task-text{if IS_COMPLETE/} task-text--done{endif/}">&TASK_NAME!HTML.</span>
-                </div>
-                ```
-        }
-    )
-
-    region completed-tasks (
-        name: Completed
-        type: cards
-        source {
-            location: localDatabase
-            type: sqlQuery
-            sqlQuery:
-                ```sql
-                select task_id,
-                       task_name,
-                       is_complete
-                  from todo_tasks
-                 where list_id = :P110_LIST_ID
-                   and is_complete = 'Y'
-                 order by completed_on desc, task_id asc
-                ```
-        }
-        layout {
-            sequence: 20
-            slot: body
-        }
-        appearance {
-            template: @/cards-container
-            templateOptions: #DEFAULT#
-        }
-        componentAppearance {
-            gridColumns: 2
+            templateOptions: [
+                #DEFAULT#
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+            ]
         }
         card {
             cssClasses: kiosk-card
@@ -310,30 +266,6 @@ page 110 (
             }
             execution {
                 sequence: 20
-                fireOnInit: false
-            }
-        )
-
-        action refresh-todo (
-            action: refresh
-            affectedElements {
-                selectionType: region
-                region: @todo-tasks
-            }
-            execution {
-                sequence: 30
-                fireOnInit: false
-            }
-        )
-
-        action refresh-completed (
-            action: refresh
-            affectedElements {
-                selectionType: region
-                region: @completed-tasks
-            }
-            execution {
-                sequence: 40
                 fireOnInit: false
             }
         )
