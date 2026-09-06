@@ -58,7 +58,7 @@ page 100 (
                 overflow-x: auto !important;
                 overflow-y: hidden !important;
                 gap: 10px;
-                margin: 0 !important;
+                margin: 0 0 20px 0 !important;
                 padding: 0 !important;
                 scrollbar-width: none;
                 -webkit-overflow-scrolling: touch;
@@ -203,6 +203,9 @@ page 100 (
                 #DEFAULT#
                 t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
             ]
+        }
+        componentAppearance {
+            gridColumns: 2
         }
         card {
             cssClasses: kiosk-card
