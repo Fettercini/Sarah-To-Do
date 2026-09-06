@@ -51,9 +51,10 @@ page 100 (
                 transform: scale(0.95);
                 background-color: #1a1a1a !important;
             }
-            #group-filter .a-Cards,
-            #group-filter *:has(> .kiosk-filter-card),
-            #group-filter *:has(> * > .kiosk-filter-card) {
+            .a-Cards:has(.kiosk-filter-card),
+            *:has(> .kiosk-filter-card),
+            *:has(> * > .kiosk-filter-card),
+            *:has(> * > * > .kiosk-filter-card) {
                 display: flex !important;
                 flex-wrap: nowrap !important;
                 overflow-x: auto !important;
@@ -62,8 +63,10 @@ page 100 (
                 scrollbar-width: none;
                 -webkit-overflow-scrolling: touch;
             }
-            #group-filter .a-Cards::-webkit-scrollbar,
-            #group-filter *::-webkit-scrollbar {
+            .a-Cards:has(.kiosk-filter-card)::-webkit-scrollbar,
+            *:has(> .kiosk-filter-card)::-webkit-scrollbar,
+            *:has(> * > .kiosk-filter-card)::-webkit-scrollbar,
+            *:has(> * > * > .kiosk-filter-card)::-webkit-scrollbar {
                 display: none;
             }
             .kiosk-filter-card {
